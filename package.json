@@ -1,0 +1,16 @@
+{
+  "name": "skype_bot",
+  "version": "1.0.0",
+  "description": "chat bot for skype",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Prasanna Deshappriya",
+  "license": "ISC",
+  "dependencies": {
+    "botbuilder": "^3.9.1",
+    "node-wit": "^4.3.0",
+    "restify": "^5.2.0"
+  }
+}
