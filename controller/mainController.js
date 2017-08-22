@@ -20,7 +20,7 @@ module.exports = {
         // let accessToken = 'OLKGXMXBYBDOHC7R3F64J6F3JVW55YLY';
         // let accessToken = '6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH';
         let accessToken = 'IJGWDAD3JJUDWNQYYXOANYHHQXOR5FER';
-        const client = new Wit({accessToken: accessToken, sessionId: 12345648});
+        const client = new Wit({accessToken: accessToken});
         interactive(client);
 
         let fbid = session.message.user.id;
@@ -52,6 +52,9 @@ module.exports = {
             }
             if(typeof data.entities.leavePolicy!=='undefined'){
                 return leavePolicyController.leavePolicyFunction(session, data);
+            }
+            if(typeof data.entities.help!=='undefined'){
+                return userController.helpFunction(session, data);
             }
             if(typeof sessions[sessionId].context.name==='undefined'){
                 session.send("Hay, i'm still under construction!. Try basic commands :)");
