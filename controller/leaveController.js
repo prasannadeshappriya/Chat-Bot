@@ -5,7 +5,12 @@ module.exports = {
            return session.send("what kind of leave?");
         }
         if(data.entities.leave[0].value==='annual'){
-            return session.send("annual leave?");
+            return session.send("---Annual Leave - Permanent full time---\n\n" +"  \n\n"+
+                "If the date of commencement of your employment is:\n\n" +
+                "       Between 1st January and 31st March: 14 days\n\n" +
+                "       Between 1st April and 30th June: 10 days\n\n" +
+                "       Between 1st July and 30th September: 7 days\n\n     " +
+                "Annual Leave earned in one year can be availed in the next year");
         }
         if(data.entities.leave[0].value==='paternity'){
             return session.send("paternity leave?");
