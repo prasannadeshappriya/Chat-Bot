@@ -17,7 +17,7 @@ module.exports = {
             var data = await client.message(session.message.text.toLowerCase(), {});
             console.log('Wit.ai response: ' + JSON.stringify(data));
             if(typeof data.entities.greetings!=='undefined' && data.entities.greetings[0].value==='true'){
-                session.send(`Hi, how can i help you?`);
+                session.send("Hi.. What is your name? my name is a");
                 return;
             }
             session.send(`Hay, i'm still under construction! try again in a little bit`);

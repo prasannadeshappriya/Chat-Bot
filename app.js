@@ -18,7 +18,10 @@ var connector = new builder.ChatConnector({
 });
 
 var bot = new builder.UniversalBot(connector);
+
+//Routes
 server.post('/api/messages', connector.listen());
+
 //Bot on
 bot.on('contactRelationUpdate', function (message) {
     if (message.action === 'add') {

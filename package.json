@@ -4,7 +4,7 @@
   "description": "chat bot for skype",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app"
   },
   "author": "Prasanna Deshappriya",
   "license": "ISC",
