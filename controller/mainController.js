@@ -4,6 +4,7 @@
 const {Wit, log} = require('node-wit');
 const {interactive} = require('node-wit');
 const leaveController = require('./leaveController');
+const helloController = require('./helloController');
 
 module.exports = {
     sendMessage: async function (session) {
@@ -18,8 +19,7 @@ module.exports = {
             var data = await client.message(session.message.text.toLowerCase(), {});
             console.log('Wit.ai response: ' + JSON.stringify(data));
             if(typeof data.entities.greetings!=='undefined' && data.entities.greetings[0].value==='true'){
-                session.send("Hi.. What is your name? my name is a");
-                return;
+                return helloController.helloFunction(session, data);
             }
             if(typeof data.entities.leave!=='undefined'){
                 return leaveController.leaveFunction(session, data);
