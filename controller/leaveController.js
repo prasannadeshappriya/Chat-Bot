@@ -10,12 +10,6 @@ module.exports = {
         if(data.entities.leave[0].value==='paternity'){
             return session.send("paternity leave?");
         }
-        if(data.entities.leave[0].value==='unauthorized absence'){
-            return session.send("unauthorized absence leave?");
-        }
-        if(data.entities.leave[0].value==='encashment on termination'){
-            return session.send("encashment on termination leave?");
-        }
         if(data.entities.leave[0].value==='no pay'){
             return session.send("no pay leave?");
         }
@@ -29,7 +23,7 @@ module.exports = {
             return session.send("lieu leave?");
         }
         if(data.entities.leave[0].value==='half a day'){
-            return session.send("halfday leave?");
+            return session.send("half a day leave?");
         }
         if(data.entities.leave[0].value==='casual'){
             return session.send("casual leave?");
