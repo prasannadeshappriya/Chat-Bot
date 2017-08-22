@@ -5,6 +5,7 @@ const {Wit, log} = require('node-wit');
 const {interactive} = require('node-wit');
 const leaveController = require('./leaveController');
 const helloController = require('./helloController');
+const leavePolicyController = require('./leavePolicyController');
 
 module.exports = {
     sendMessage: async function (session) {
@@ -23,6 +24,8 @@ module.exports = {
             }
             if(typeof data.entities.leave!=='undefined'){
                 return leaveController.leaveFunction(session, data);
+            }if(typeof data.entities.leavePolicy!=='undefined'){
+                return leavePolicyController.leavePolicyFunction(session, data);
             }
             session.send(`Hay, i'm still under construction! try again in a little bit`);
         }catch (err){
