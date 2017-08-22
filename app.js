@@ -5,6 +5,9 @@ const restify = require('restify');
 const builder = require('botbuilder');
 const mainController = require('./controller/mainController');
 
+//Manage sessions
+const sessions = {};
+
 // Setup Restify Server
 var server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3000, function () {
@@ -48,5 +51,5 @@ String.prototype.contains = function(content){
 
 bot.dialog('/', mainController.sendMessage);
 
-
+module.exports = sessions;
 
