@@ -14,10 +14,16 @@ server.listen(process.env.port || process.env.PORT || 3000, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
 
-// Create chat bot
+// Microsoft bot framework
+//Sithara
+// var connector = new builder.ChatConnector({
+//     appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
+//     appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
+// });
+//Prasanna
 var connector = new builder.ChatConnector({
-    appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
-    appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
+    appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
+    appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
 });
 
 var bot = new builder.UniversalBot(connector);
