@@ -1,6 +1,7 @@
 module.exports = {
     leaveFunction: async function(session, data){
         //console.log(data.entities.leave[0]);
+
         if(data.entities.leave[0].value==='null'){
            return session.send("what kind of leave?");
         }

@@ -16,7 +16,7 @@ module.exports = {
     nameFunction: async function(session, data, sessionId){
         console.log('SessionID: ' + sessionId);
         let user_name = data.entities.name[0].value;
-        sessions[sessionId].context = {name: user_name};
+        sessions[sessionId].context.name = user_name;
         session.send("Hello " + user_name + ", What can i do for you?");
     },
 
