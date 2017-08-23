@@ -7,6 +7,7 @@ const leaveController = require('./leaveController');
 const userController = require('./userController');
 const leavePolicyController = require('./leavePolicyController');
 const sessions = require('../app');
+const rn= require('random-number');
 
 module.exports = {
     sendMessage: async function (session) {
@@ -39,7 +40,7 @@ module.exports = {
         //------------------------------------------------------------------------
 
         try {
-            var data = await client.message(session.message.text.toLowerCase(), {});
+            let data = await client.message(session.message.text.toLowerCase(), {});
             console.log('Wit.ai response: ' + JSON.stringify(data));
             if(typeof data.entities.name!=='undefined'){
                 return userController.nameFunction(session, data, sessionId);
@@ -48,10 +49,13 @@ module.exports = {
                 return userController.helloFunction(session, data, sessionId);
             }
             //if user ask without telling their name
-            //if user ask without telling their name
             if(typeof sessions[sessionId].context.name==="undefined"){
                 sessions[sessionId].context.preQuection = true;
-                return session.send("I can help you. But before we begin, what is your name?");
+                let reply = ["I can help you. But before we begin, what is your name?",
+                    "Let's start with your name",
+                    "I need your name to continue :)"];
+                let options = {min: 0, max: 2, integer: true};
+                return session.send(reply[rn(options)]);
             }
 
             if(typeof data.entities.leave!=='undefined'){
