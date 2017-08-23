@@ -69,7 +69,8 @@ module.exports = {
                 }
             }
             if(typeof sessions[sessionId].context.name==='undefined'){
-                session.send("Hay, i'm still under construction!. Try basic commands :)");
+                session.send("I am sorry. I don't know what you are asking :(. For the moment I can help you with\n\n" +
+                    "1.Leave Policy");
             }else{
                 session.send("Hay " + sessions[sessionId].context.name + ", i'm still under construction!. Try basic commands :)");
             }
