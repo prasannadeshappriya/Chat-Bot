@@ -72,7 +72,7 @@ module.exports = {
                 session.send("I am sorry. I don't know what you are asking :(. For the moment I can help you with\n\n" +
                     "1.Leave Policy");
             }else{
-                session.send("Hay " + sessions[sessionId].context.name + "I am sorry. I don't know what you are asking :(. For the moment I can help you with\n\n" +
+                session.send("Hay " + sessions[sessionId].context.name + ", I am sorry. I don't know what you are asking :(.\n\n For the moment I can help you with,\n\n" +
                     "1.Leave Policy");
             }
         }catch (err){

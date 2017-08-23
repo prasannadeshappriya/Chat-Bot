@@ -45,7 +45,7 @@ module.exports = {
         }
         if(sessions[sessionId].context.controller.ques==="annual_leave_date"){
             sessions[sessionId].context.controller.name = "";
-            return session.send(data._text);
+            return session.send("This function is still under maintenance. Try again later :(");
         }
         if(data._text.contains("yes")){
             if(sessions[sessionId].context.controller.ques==="annual_leave_count"){
