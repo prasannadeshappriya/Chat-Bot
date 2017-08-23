@@ -43,10 +43,13 @@ module.exports = {
                 return session.send("casual leave?");
             }
         }
+        if(sessions[sessionId].context.controller.ques==="annual_leave_date"){
+            return session.send(data._text);
+        }
         if(data._text.contains("yes")){
             if(sessions[sessionId].context.controller.ques==="annual_leave_count"){
                 sessions[sessionId].context.controller.ques = "annual_leave_date";
-                return session.send("Sure, What is your start date? [Eg: 2007-08-09");
+                return session.send("Sure, What is your start date? [Eg: 2007-08-09]");
             }
         }
         if(data._text.contains("no")){

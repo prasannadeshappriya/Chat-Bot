@@ -63,7 +63,7 @@ module.exports = {
             if(typeof data.entities.help!=='undefined'){
                 return userController.helpFunction(session, data);
             }
-            if(typeof sessions[sessionId].context.controller.name!=='undefined'){
+            if(typeof sessions[sessionId].context.controller!=='undefined'){
                 if(sessions[sessionId].context.controller.name==="leave"){
                     return leaveController.leaveFunction(session, data, sessionId);
                 }
