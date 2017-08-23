@@ -27,7 +27,7 @@ module.exports = {
         session.send("Hello " + user_name + ", What can i do for you?");
     },
 
-    helpFunction: async function(session, data){
+    helpFunction: async function(session, data, sessionId){
         sessions[sessionId].context.controller = {};
         session.send("My name is teena, I'm still in development stage.\n\n" +
             "For now, I can help with following problems. I hope to help you more in future :)\n\n" +
