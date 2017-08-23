@@ -53,13 +53,18 @@ module.exports = {
             }
 
             if(typeof data.entities.leave!=='undefined'){
-                return leaveController.leaveFunction(session, data);
+                return leaveController.leaveFunction(session, data, sessionId);
             }
             if(typeof data.entities.leavePolicy!=='undefined'){
                 return leavePolicyController.leavePolicyFunction(session, data);
             }
             if(typeof data.entities.help!=='undefined'){
                 return userController.helpFunction(session, data);
+            }
+            if(typeof sessions[sessionId].context.controller.name!=='undefined'){
+                if(sessions[sessionId].context.controller.name==="leave"){
+                    return leaveController.leaveFunction(session, data, sessionId);
+                }
             }
             if(typeof sessions[sessionId].context.name==='undefined'){
                 session.send("Hay, i'm still under construction!. Try basic commands :)");
