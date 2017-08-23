@@ -48,7 +48,9 @@ module.exports = {
                 return userController.helloFunction(session, data, sessionId);
             }
             //if user ask without telling their name
+            //if user ask without telling their name
             if(typeof sessions[sessionId].context.name==="undefined"){
+                sessions[sessionId].context.preQuection = true;
                 return session.send("I can help you. But before we begin, what is your name?");
             }
 

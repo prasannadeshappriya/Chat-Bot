@@ -17,6 +17,11 @@ module.exports = {
         console.log('SessionID: ' + sessionId);
         let user_name = data.entities.name[0].value;
         sessions[sessionId].context.name = user_name;
+        if(typeof sessions[sessionId].context.preQuection!=="undefined" && sessions[sessionId].context.preQuection) {
+            sessions[sessionId].context.preQuection = false;
+            session.send("Hello " + user_name + ", Shall we start the conversation now, what can i do for you?");
+            return;
+        }
         session.send("Hello " + user_name + ", What can i do for you?");
     },
 
