@@ -58,10 +58,10 @@ module.exports = {
                 return leaveController.leaveFunction(session, data, sessionId);
             }
             if(typeof data.entities.leavePolicy!=='undefined'){
-                return leavePolicyController.leavePolicyFunction(session, data);
+                return leavePolicyController.leavePolicyFunction(session, data, sessionId);
             }
             if(typeof data.entities.help!=='undefined'){
-                return userController.helpFunction(session, data);
+                return userController.helpFunction(session, data, sessionId);
             }
             if(typeof sessions[sessionId].context.controller!=='undefined'){
                 if(sessions[sessionId].context.controller.name==="leave"){
