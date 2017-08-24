@@ -57,7 +57,6 @@ module.exports = {
                 let options = {min: 0, max: 2, integer: true};
                 return session.send(reply[rn(options)]);
             }
-
             if(typeof data.entities.leave!=='undefined'){
                 return leaveController.leaveFunction(session, data, sessionId);
             }

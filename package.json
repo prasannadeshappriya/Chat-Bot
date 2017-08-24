@@ -9,7 +9,9 @@
   "author": "Prasanna Deshappriya",
   "license": "ISC",
   "dependencies": {
+    "DateValidator": "^1.0.5",
     "botbuilder": "^3.9.1",
+    "node-comparison": "^0.1.1",
     "node-wit": "^4.3.0",
     "random-number": "0.0.9",
     "restify": "^5.2.0"

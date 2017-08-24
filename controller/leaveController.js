@@ -1,4 +1,6 @@
 const sessions = require('../app');
+const compare= require('node-comparison').compare;
+const  date_validator= require('DateValidator').DateValidator;
 
 module.exports = {
     leaveFunction: async function(session, data, sessionId){
@@ -44,6 +46,15 @@ module.exports = {
             }
         }
         if(sessions[sessionId].context.controller.ques==="annual_leave_date"){
+            let input=data._text;
+            let startDate= input.split('-');
+            var is_valid= date_validator.validate(startDate[0],startDate[1],startDate[2]);
+            if(!is_valid){
+                return session.send("Please enter the valid date");
+            }
+
+
+            //----------------------
             sessions[sessionId].context.controller.name = "";
             return session.send("This function is still under maintenance. Try again later :(");
         }
