@@ -48,15 +48,41 @@ module.exports = {
         if(sessions[sessionId].context.controller.ques==="annual_leave_date"){
             let input=data._text;
             let startDate= input.split('-');
-            var is_valid= date_validator.validate(startDate[0],startDate[1],startDate[2]);
+            let is_valid= date_validator.validate(startDate[0],startDate[1],startDate[2]);
             if(!is_valid){
                 return session.send("Please enter the valid date");
             }
+            if(startDate.length < 3){
+                return session.send("Enter your date as \"2017-08-09\":)");
+            }
+            let currentYear= new Date().getUTCFullYear();
+            let currentMonth = new Date().getUTCMonth();
+            let currentDay= new Date().getUTCDate();
+            let year= parseInt(startDate[0]);
+            if(currentYear<year){
+                return session.send("Ohh, I think you are not a member of Eyepax family yet :P")
+            }
+            if(currentYear===year){
+                if ((currentMonth + 1) < parseInt(startDate[1])) {
+                    return session.send("Ohh, I think you are not a member of Eyepax family yet :P")
+                }
+                if (currentDay < parseInt(startDate[2])) {
+                    return session.send("Ohh, I think you are not a member of Eyepax family yet :P")
+                }
+            }
 
+            let date= new Date(year,parseInt(startDate[1]),parseInt(startDate[2]));
 
-            //----------------------
-            sessions[sessionId].context.controller.name = "";
-            return session.send("This function is still under maintenance. Try again later :(");
+            if(compare('date','within',date, new Date(year,1,1), new Date(year,3,31))){
+                session.send("You have Annual leave of 14 days");
+            }else if(compare('date','within',date, new Date(year,4,1), new Date(year,6,30))){
+                session.send("You have Annual leave of 10 days");
+            }else if(compare('date','within',date, new Date(year,7,1), new Date(year,9,30))){
+                session.send("You have Annual leave of 7 days");
+            }else{
+                session.send("You have Annual leave of 4 days");
+            }
+            // return sessions[sessionId].context.controller.name = "";
         }
         if(data._text.contains("yes")){
             if(sessions[sessionId].context.controller.ques==="annual_leave_count"){
