@@ -66,6 +66,14 @@ module.exports = {
             if(typeof data.entities.help!=='undefined'){
                 return userController.helpFunction(session, data, sessionId);
             }
+            if(data._text.contains("thank")){
+                sessions[sessionId].context.controller = {};
+                let rpThank= ["You're Welcome...","No problem...","Don't mention it...","It's no bother...","My pleasure...","It's all right...","It's nothing"];
+                let smiley=[":D",":)","(like)","(yn)",";)","(nod)"];
+                let options={min:0, max: 6, integer: true};
+                session.send(rpThank[rn(options)]);
+                return session.send(smiley[rn(options)]);
+            }
             if(typeof sessions[sessionId].context.controller!=='undefined'){
                 if(sessions[sessionId].context.controller.name==="leave"){
                     return leaveController.leaveFunction(session, data, sessionId);
