@@ -1,19 +1,16 @@
 const sessions = require('../app');
 const compare= require('node-comparison').compare;
 const  date_validator= require('DateValidator').DateValidator;
+const rn= require('random-number');
 
 module.exports = {
     leaveFunction: async function(session, data, sessionId){
         //console.log(data.entities.leave[0]);
+        let response = ["So.. How can i help you more? :)", "Ask me something else :)",
+            "Tell me about your questions, I'll help if i can :)"];
+        let options;
         if(typeof data.entities.leave!== "undefined") {
             switch(data.entities.leave[0].value){
-                case 'null':
-                    session.send("These are the leave you can apply,\n\n" +
-                        "1.<b>Annual leave</b> - Permanent full time\n\n" + "2.<b>Casual leave</b>\n\n" +
-                        "3.<b>Half a day leave</b>\n\n" + "4.<b>Medical leave</b>\n\n" + "5.<b>Maternity leave</b>\n\n" + "6.<b>Paternity leave</b>\n\n" +
-                        "7.<b>Lieu leave</b>\n\n" + "8.<b>No Pay Leave</b>\n\n" +
-                        "You can also ask me about <b>leave policies</b> as well");
-                    return session.send("What kind of leave you would like to know more?");
                 case 'annual':
                     sessions[sessionId].context.controller = {};
                     sessions[sessionId].context.controller.name = "leave";
@@ -32,49 +29,63 @@ module.exports = {
                 case 'casual':
                     session.send("Your Casual Leave entitlement is <b>7 days per year</b>, and can apply only <b>1-2 days</b> casual leave at" +
                         " <b>one occasion</b>. \n\n" +
-                        " You cannot be utilized Casual Leave immediately <b>before or after annual leave</b><br>" +
-                        " You must apply casual leave <b>2 weeks prior</b> to the leave date stating the reason<br>" +
-                        " You cannot utilize any casual leave upon submission of the letter of resignation(while serving the resignation notice)<br>");
-                    return session.send("Ask me something else :)");
+                        " You cannot be utilized Casual Leave immediately <b>before or after annual leave</b> \n\n" +
+                        " You must apply casual leave <b>2 weeks prior</b> to the leave date stating the reason \n\n" +
+                        " You cannot utilize any casual leave upon submission of the letter of resignation(while serving the resignation notice) \n\n");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
                 case 'half a day':
-                    session.send("You can apply Half a Day Leave only for <b>casual and sick</b> purposes<br> :)" +
-                        " You can take either the 1st or the 2nd half (as specified below) on a single day, provided that You works a minimum of 5 hrs " +
-                        "excluding the lunch break.<br><br>" +
-                        "   -1st Half:    9.00.a.m. – 1.30.p.m.<br>" +
-                        "   -2nd Half:   1.30 .p.m. – 6.30.p.m.<br><br>");
-                    return session.send("So.. How can i help you more? :)");
+                    session.send("You can apply Half a Day Leave only for <b>casual and sick</b> purposes :) \n\n" +
+                        "You can take either the 1st or the 2nd half (as specified below) on a single day, provided that You works a minimum of 5 hrs " +
+                        "excluding the lunch break. \n\n" +
+                        "   -1st Half:    9.00.a.m. – 1.30.p.m. \n\n" +
+                        "   -2nd Half:   1.30 .p.m. – 6.30.p.m. \n\n");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
                 case 'medical':
-                    session.send("You can apply Medical Leave if granted by the <b>Letter of Appointment</b> or upon completion of the below stipulated tenure in the organization.<br>" +
-                        "   -You will be entitled with remuneration to seven days of Medical leave through the letter of appointment or by fulfilling below tenure requirements.<br>" +
-                        "   -If medical leave is taken for <b> more than two days</b>, it should be supported by a medical certificate from a registered western qualified medical practitioner.<br>");
-                    session.send("These are the tenure requirements in the Eyepax :)<br>"
-                        +"  -If you complete <b>four years</b> with the company you will be entitled for<b>7 days of medical leave per year</b>.<br>" +
-                        "   -If you confirmed employee, before completing four years, will be entitled for one day medical leave for each completed six months annually.<br>" +
-                        "   -If you are in <b>Technical Lead/Senior Technical Lead/Manager</b> and above positions will be entitled for <b>7 days of medical leaves</b> upon completion of two years.<br>" +
-                        "   -You cannot utilize any Medical leave upon submission of the letter of resignation(while serving the resignation notice)<br>");
-                    return session.send("Tell me about your questions, I'll help if i can :)");
+                    session.send("You can apply Medical Leave if granted by the <b>Letter of Appointment</b> or upon completion of the below stipulated tenure in the organization. \n\n" +
+                        "   -You will be entitled with remuneration to seven days of Medical leave through the letter of appointment or by fulfilling below tenure requirements. \n\n" +
+                        "   -If medical leave is taken for <b> more than two days</b>, it should be supported by a medical certificate from a registered western qualified medical practitioner. \n\n");
+                    session.send("These are the tenure requirements in the Eyepax :) \n\n" +
+                        "   -If you complete <b>four years</b> with the company you will be entitled for<b>7 days of medical leave per year</b>. \n\n" +
+                        "   -If you confirmed employee, before completing four years, will be entitled for one day medical leave for each completed six months annually. \n\n" +
+                        "   -If you are in <b>Technical Lead/Senior Technical Lead/Manager</b> and above positions will be entitled for <b>7 days of medical leaves</b> upon completion of two years. \n\n" +
+                        "   -You cannot utilize any Medical leave upon submission of the letter of resignation(while serving the resignation notice) \n\n");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
                 case 'maternity':
-                    session.send("If you are a Female employee you are entitled to <b>84 working days</b> as maternity leave for your <b>first</b> and <b>second</b> child.<br>" +
-                        "Where You already has two children, in respect of the birth of the third child she is entitled to 42 working days on full pay.<br>" +
+                    session.send("If you are a Female employee you are entitled to <b>84 working days</b> as maternity leave for your <b>first</b> and <b>second</b> child. \n\n" +
+                        "Where You already has two children, in respect of the birth of the third child she is entitled to 42 working days on full pay. \n\n" +
                         "You entitled to maternity leave as above, the confinement must result in the birth of a <b>live child</b>.");
-                    return session.send("Tell me about your questions, I'll help if i can :)");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
                 case 'paternity':
-                    session.send("If you are a Male employee you will be granted <b>5 days</b> of paid leave on your child's birth<br>" +
-                        "You should be the <b>biological father of the child or legal father </b>of the child adopted to be eligible for the paternity leave.<br>" +
+                    session.send("If you are a Male employee you will be granted <b>5 days</b> of paid leave on your child's birth \n\n" +
+                        "You should be the <b>biological father of the child or legal father </b>of the child adopted to be eligible for the paternity leave. \n\n" +
                         "In case of a Child birth / adoption you or your supervisor should inform the management and HR team to enable the paternity leave in the leave and attendance system.");
-                    return session.send("Tell me about your questions, I'll help if i can :)");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
                 case 'lieu':
-                    session.send("You may be permitted to take lieu leave, with full remuneration for the days you have worked in weekends/special holidays on Company’s/management request.<br>" +
-                        "Lieu Leave must be applied 7 days prior to the leave date.<br>" +
-                        "Lieu leave can be applied during the calendar year and if not utilized, available lieu leave will be encashed.<br>" +
-                        "Lieu leave cannot be carried forward to another calendar year.<br>" +
-                        "All Lieu Leave allocation requests should be approved by the management.");
-                    return session.send("Ask me something else :)");
+                    session.send("You may be permitted to take lieu leave, with full remuneration for the days you have worked in weekends/special holidays on Company’s/management request. \n\n" +
+                        "Lieu Leave must be applied <b>7 days</b> prior to the leave date. \n\n" +
+                        "Lieu leave can be applied during the calendar year and if not utilized, available lieu leave will be encashed. \n\n" +
+                        "Lieu leave <b>cannot be carried forward to another calendar year</b>. \n\n" +
+                        "All Lieu Leave allocation requests <b>should be approved by the management</b>.");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
                 case 'no pay':
                     session.send("If you have exhausted your allocated leave quota for the calendar year will be put on no pay leave. " +
                         "Any such requirement should be approved by the management at all times and the approval will be " +
                         "given on a case by case basis");
-                    return session.send("So.. How can i help you more? :)");
+                    options={min:0, max: 2, integer: true};
+                    return session.send(response[rn(options)]);
+                case 'null':
+                    session.send("These are the leave you can apply,\n\n" +
+                        "1.<b>Annual leave</b> - Permanent full time\n\n" + "2.<b>Casual leave</b>\n\n" +
+                        "3.<b>Half a day leave</b>\n\n" + "4.<b>Medical leave</b>\n\n" + "5.<b>Maternity leave</b>\n\n" + "6.<b>Paternity leave</b>\n\n" +
+                        "7.<b>Lieu leave</b>\n\n" + "8.<b>No Pay Leave</b>\n\n" +
+                        "You can also ask me about <b>leave policies</b> as well");
+                    return session.send("What kind of leave you would like to know more?");
             }
         }
         if(sessions[sessionId].context.controller.ques==="annual_leave_date"){
@@ -120,7 +131,8 @@ module.exports = {
                     session.send("You have Annual leave of 4 days");
                 }
                 sessions[sessionId].context.controller.name = "";
-                return session.send("Tell me about your questions, I'll help if i can :)");
+                options={min:0, max: 2, integer: true};
+                return session.send(response[rn(options)]);
             }else{
                 return session.send("I can only understand dates in 'YYYY-MM-DD' format :(/n/n" +
                     "Tell me the date again if you like to know about your annual leave count.");

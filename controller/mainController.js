@@ -79,6 +79,10 @@ module.exports = {
                     return leaveController.leaveFunction(session, data, sessionId);
                 }
             }
+            if(typeof data.entities.fun!=='undefined'){
+                return session.send("Please ask me about the company policies and the problems regarding the company :)\n\n" +
+                    "Don't tell me your personal problems :P");
+            }
             if(typeof sessions[sessionId].context.name==='undefined'){
                 session.send("I am sorry. I don't know what you are asking :(. For the moment I can help you with\n\n" +
                     "1.Leave Policy");
