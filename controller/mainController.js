@@ -3,9 +3,9 @@
  */
 const {Wit, log} = require('node-wit');
 const {interactive} = require('node-wit');
-const leaveController = require('./leaveController');
-const userController = require('./userController');
-const leavePolicyController = require('./leavePolicyController');
+const leaveController = require('../bot_controller/leaveController');
+const userController = require('../bot_controller/userController');
+const leavePolicyController = require('../bot_controller/leavePolicyController');
 const sessions = require('../app');
 const rn= require('random-number');
 
@@ -37,7 +37,7 @@ module.exports = {
             sessionId = session.message.user.id;
             sessions[sessionId] = {fbid: fbid, context: {}};
         }
-        //------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------------------
 
         try {
             let data = await client.message(session.message.text.toLowerCase(), {});
