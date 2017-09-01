@@ -55,6 +55,7 @@ let bot = new builder.UniversalBot(connector);
 server.post('/api/messages', connector.listen());
 server.post('/intent/create', dashboardController.createIntent);
 server.get('/intent/get', dashboardController.getIntent);
+server.post('/intent/delete', dashboardController.deleteIntent);
 server.post('/entity/create', dashboardController.createEntity);
 server.get('/entity/get', dashboardController.getEntity);
 

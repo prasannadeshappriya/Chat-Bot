@@ -16,6 +16,7 @@ module.exports = {
         console.log(data);
         return res.json({message: 'success'});
     },
+
     getEntity: async function(req,res){
         let entity_id = req.query.entityid;
         console.log(entity_id);
@@ -67,4 +68,18 @@ module.exports = {
             return res.send(501).json({message: 'This section is not implemented'});
         }
     },
+
+    deleteIntent: async function(req,res){
+        let intent_name = req.body.intent_name;
+        if(typeof intent_name==='undefined' || intent_name===''){
+            return res.json(400,{message: 'intent_name is required'});
+        }
+        let result = await models.intent.destroy({
+            where: {name: intent_name}
+        });
+        if(result){
+            return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
+        }
+        return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
+    }
 };
