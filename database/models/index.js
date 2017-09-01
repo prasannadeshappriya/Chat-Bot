@@ -5,7 +5,7 @@ var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(module.filename);
 var env       = process.env.NODE_ENV || 'development';
-var config    = require(__dirname + '/..\config\config.json')[env];
+var config    = require(__dirname + '/../config/config.json')[env];
 var db        = {};
 
 if (config.use_env_variable) {
@@ -34,7 +34,7 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 db.entity =require('../models/entity')(sequelize,Sequelize);
-db.intent =require('../models/entity')(sequelize,Sequelize);
-db.settings =require('../models/entity')(sequelize,Sequelize);
+db.intent =require('../models/intent')(sequelize,Sequelize);
+db.settings =require('../models/settings')(sequelize,Sequelize);
 
 module.exports = db;
