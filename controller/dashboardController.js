@@ -19,8 +19,30 @@ module.exports = {
 
     getEntity: async function(req,res){
         let entity_id = req.query.entityid;
-        console.log(entity_id);
-        return res.json({message: 'success'});
+        if(typeof entity_id==='undefined' || entity_id===''){
+            return res.json(400,{message: 'entity_id is required'});
+        }
+        let resData = [];   //Return Data
+        let entities = await models.entity.findAll();
+        try {
+            Object.keys(entities).forEach(function (key) {
+                resData.push({
+                    id: entities[key].dataValues.intent_id,
+                    name: entities[key].dataValues.name,
+                    description: entities[key].dataValues.description,
+                });
+            });
+            for(let i=0; i<resData.length; i++){
+                let intent = await models.intent.findOne({
+                    where: {id: resData[i].id}
+                });
+                if(intent) {resData[i]['intent_name'] = intent.dataValues.name;}
+                else{resData[i]['intent_name'] = 'Error_Intent';}
+            }
+            return res.json(200, {data: resData});
+        }catch (err){
+            return res.json(500, {message: 'internal server error'});
+        }
     },
 
     createIntent: async function(req,res){
