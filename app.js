@@ -19,6 +19,7 @@ models.sequelize.sync().then(function () {
 //Controllers
 const mainController = require('./controller/mainController');
 const dashboardController = require('./controller/dashboardController');
+const witController = require('./controller/witController');
 
 //Manage sessions
 const sessions = {};
@@ -58,6 +59,7 @@ server.get('/intent/get', dashboardController.getIntent);
 server.post('/intent/delete', dashboardController.deleteIntent);
 server.post('/entity/create', dashboardController.createEntity);
 server.get('/entity/get', dashboardController.getEntity);
+server.get('/wit/getEntityById', witController.getEntityById);
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {

@@ -20,6 +20,7 @@
     "node-comparison": "^0.1.1",
     "node-wit": "^4.3.0",
     "random-number": "0.0.9",
+    "request": "^2.81.0",
     "restify": "^5.2.0",
     "restify-plugins": "^1.6.0",
     "sequelize": "^4.8.0",
