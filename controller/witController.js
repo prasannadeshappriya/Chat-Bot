@@ -18,9 +18,9 @@ module.exports = {
                 'Authorization': 'Bearer 6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH',
                 'Content-Type': 'application/json'
             }
-        }, function (err, res) {
+        }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
-            return res.json(200,{data: res.body});
+            return res.json(200,{data: wit_res.body});
         });
     }
 };
