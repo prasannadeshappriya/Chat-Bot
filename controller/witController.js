@@ -59,5 +59,41 @@ module.exports = {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
             return res.json(200,{data: wit_res.body});
         });
+    },
+    postEntity: async function(req,res){
+        print_request('postEntity');
+        let wit_doc = req.body.doc;
+        let wit_id = req.body.id;
+        let wit_lookups = req.body.lookups;
+        let wit_values = req.body.values;
+        if(typeof wit_doc==='undefined' || wit_doc===''){
+            return res.json(400,{message: 'wit_doc is required'});}
+        if(typeof wit_id==='undefined' || wit_id===''){
+            return res.json(400,{message: 'wit_id is required'});}
+        if(typeof wit_lookups==='undefined' || wit_lookups===''){
+            return res.json(400,{message: 'wit_lookups is required'});}
+        if(typeof wit_values==='undefined' || wit_values===''){
+            return res.json(400,{message: 'wit_values is required'});}
+        let url = 'https://api.wit.ai/entities?v=20170307';
+        try{
+            wit_values = JSON.parse(wit_values);
+            wit_lookups = JSON.parse(wit_lookups);
+        }catch (err){
+            return res.json(400,{
+                message: 'wit_values/wit_lookups should be in JSON format, JSON.parse error',
+                error: err
+            });
+        }
+        let body = {"doc": wit_doc, "id": wit_id, "lookups": [wit_lookups], "values": wit_values};
+        request({
+            method: 'POST', url: url,
+            json: body,
+            headers: {
+                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+            }
+        }, function (err, wit_res) {
+            if (err) {return res.json(500,{message: 'Internal sever error'});}
+            return res.json(200,{data: wit_res.body});
+        });
     }
 };

@@ -61,6 +61,7 @@ server.post('/entity/create', dashboardController.createEntity);
 server.get('/entity/get', dashboardController.getEntity);
 server.get('/wit/getEntityById', witController.getEntityById);
 server.post('/wit/putEntityById', witController.putEntityById);
+server.post('/wit/postEntity', witController.postEntity);
 
 
 //Bot on
