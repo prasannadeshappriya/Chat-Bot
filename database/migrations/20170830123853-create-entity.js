@@ -8,8 +8,8 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      intent_id: {
-        type: Sequelize.INTEGER,
+      entity_dis: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       name: {

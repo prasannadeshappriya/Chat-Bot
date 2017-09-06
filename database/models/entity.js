@@ -1,8 +1,8 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var entity = sequelize.define('entity', {
-    intent_id: {
-      type: DataTypes.INTEGER,
+  let entity = sequelize.define('entity', {
+    entity_dis: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     name: {
