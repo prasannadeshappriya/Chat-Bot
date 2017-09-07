@@ -85,19 +85,37 @@ module.exports = {
             return res.json(400,{message: 'wit_id is required'});}
         if(typeof wit_lookups==='undefined' || wit_lookups===''){
             return res.json(400,{message: 'wit_lookups is required'});}
-        if(typeof wit_values==='undefined' || wit_values===''){
-            return res.json(400,{message: 'wit_values is required'});}
         let url = 'https://api.wit.ai/entities?v=20170307';
+        let body;
         try{
-            wit_values = JSON.parse(wit_values);
             wit_lookups = JSON.parse(wit_lookups);
         }catch (err){
             return res.json(400,{
-                message: 'wit_values/wit_lookups should be in JSON format, JSON.parse error',
+                message: 'wit_lookups should be in JSON format, JSON.parse error',
                 error: err
             });
         }
-        let body = {"doc": wit_doc, "id": wit_id, "lookups": [wit_lookups], "values": wit_values};
+        if(typeof wit_values==='undefined' || wit_values===''){
+            try{
+                body = {"doc": wit_doc, "id": wit_id, "lookups": [wit_lookups]};
+            }catch (err){
+                return res.json(400,{
+                    message: 'wit_values should be in JSON format, JSON.parse error',
+                    error: err
+                });
+            }
+        }else{
+            try{
+                wit_values = JSON.parse(wit_values);
+                body = {"doc": wit_doc, "id": wit_id, "lookups": [wit_lookups], "values": wit_values};
+            }catch (err){
+                return res.json(400,{
+                    message: 'wit_values/wit_lookups should be in JSON format, JSON.parse error',
+                    error: err
+                });
+            }
+        }
+        console.log(body);
         request({
             method: 'POST', url: url,
             json: body,
@@ -105,6 +123,7 @@ module.exports = {
                 'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
+            console.log(wit_res.body);
             if (err) {return res.json(500,{message: 'Internal sever error'});}
             return res.json(200,{data: wit_res.body});
         });
@@ -115,7 +134,6 @@ module.exports = {
         if(typeof message==='undefined' || message===''){
             return res.json(400,{message: 'message is required'});}
         message = message.replace(" ","%20");
-        console.log(message);
         let url = 'https://api.wit.ai/message?v=20170307&q=' + message;
         request({
             method: 'GET', url: url,
