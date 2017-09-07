@@ -6,15 +6,28 @@ const models = require('../database/models');
 module.exports = {
     createEntity: async function(req,res){
         let entity_name = req.body.entity_name;
-        let intent_id = req.body.intent_id;
+        let entity_data = req.body.entity_data;
         let entity_description = req.body.entity_description;
-        let data = {
-            entity_name: entity_name,
-            intent_id: intent_id,
-            entity_description: entity_description
-        };
-        console.log(data);
-        return res.json({message: 'success'});
+        if(typeof entity_name==='undefined' || entity_name===''){
+            return res.json(400,{message: 'entity_name is required'});}
+        if(typeof entity_data==='undefined' || entity_data===''){
+            return res.json(400,{message: 'entity_data is required'});}
+        if(typeof entity_description==='undefined' || entity_description===''){
+            return res.json(400,{message: 'entity_description is required'});}
+        let db_response = await models.entity.findOrCreate({
+            where: {
+                name: entity_name
+            },
+            defaults: {
+                name: entity_name,
+                entity_dis: entity_data,
+                description: entity_description
+            }
+        });
+        if(db_response[1]){
+            return res.json(201,{message: 'entity created'});
+        }
+        return res.json(409,{message: 'entity already exist'});
     },
 
     getEntity: async function(req,res){

@@ -60,9 +60,11 @@ server.post('/intent/delete', dashboardController.deleteIntent);
 server.post('/entity/create', dashboardController.createEntity);
 server.get('/entity/get', dashboardController.getEntity);
 server.get('/wit/getEntityById', witController.getEntityById);
+server.get('/wit/getEntities', witController.getEntities);
 server.post('/wit/putEntityById', witController.putEntityById);
 server.post('/wit/postEntity', witController.postEntity);
-
+server.get('/wit/getMessage', witController.getMessage);
+server.post('/wit/postSample', witController.postSample);
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {
