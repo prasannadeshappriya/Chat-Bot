@@ -14,19 +14,19 @@ module.exports = {
             return res.json(400,{message: 'entity_data is required'});}
         if(typeof entity_description==='undefined' || entity_description===''){
             return res.json(400,{message: 'entity_description is required'});}
-        // let db_response = await models.entity.findOrCreate({
-        //     where: {
-        //         name: entity_name
-        //     },
-        //     defaults: {
-        //         name: entity_name,
-        //         entity_dis: entity_data,
-        //         description: entity_description
-        //     }
-        // });
-        // if(db_response[1]){
+        let db_response = await models.entity.findOrCreate({
+            where: {
+                name: entity_name
+            },
+            defaults: {
+                name: entity_name,
+                entity_dis: entity_data,
+                description: entity_description
+            }
+        });
+        if(db_response[1]){
             return res.json(201,{message: 'entity created'});
-        // }
+        }
         return res.json(409,{message: 'entity already exist'});
     },
 

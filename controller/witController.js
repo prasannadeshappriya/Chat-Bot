@@ -115,7 +115,6 @@ module.exports = {
                 });
             }
         }
-        console.log(body);
         request({
             method: 'POST', url: url,
             json: body,
