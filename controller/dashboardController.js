@@ -29,7 +29,6 @@ module.exports = {
         }
         return res.json(409,{message: 'entity already exist'});
     },
-
     getEntity: async function(req,res){
         let entity_id = req.query.entityid;
         if(typeof entity_id==='undefined' || entity_id===''){
@@ -57,7 +56,6 @@ module.exports = {
             return res.json(500, {message: 'internal server error'});
         }
     },
-
     createIntent: async function(req,res){
         let intent_name = req.body.intent_name;
         let intent_description = req.body.intent_description;
@@ -82,7 +80,6 @@ module.exports = {
         }
         return res.json(409,{message: 'intent already exist'});
     },
-
     getIntent: async function(req,res){
         let intent_id = req.query.intentid;
         if(typeof intent_id==='undefined' || intent_id===''){
@@ -103,7 +100,6 @@ module.exports = {
             return res.send(501).json({message: 'This section is not implemented'});
         }
     },
-
     deleteIntent: async function(req,res){
         let intent_name = req.body.intent_name;
         if(typeof intent_name==='undefined' || intent_name===''){
