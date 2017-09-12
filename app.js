@@ -54,7 +54,7 @@ server.use(cors({
     methods: ['GET','PUT','DELETE','POST','OPTIONS']
 }));
 server.opts('/\.*/', corsHandler, optionsRoute);
-//---------------------------------------------------------------------------------------------------  ------
+//---------------------------------------------------------------------------------------------------------
 
 server.listen(process.env.port || process.env.PORT || 3000, function () {
     console.log('%s message server listening to %s', server.name, server.url);
@@ -77,26 +77,84 @@ let bot = new builder.UniversalBot(connector);
 //Message server routes
 server.post('/api/messages', connector.listen());
 
-server.get(
-    "/getJobTypes",
+//Server routes--------------------------------------------------------------------------------------------
+server.post(
+    "/intent/create",
     passport.authenticate('jwt', {session :false}),
     function (req,res) {
-        return res.json(200,{status: 'done'});
+        dashboardController.createIntent(req,res);
     }
 );
-
-//Server routes
-server.post('/intent/create',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.createIntent(req,res);})});
-server.get('/intent/get',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.getIntent(req,res);})});
-server.post('/intent/delete',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.deleteIntent(req,res);})});
-server.post('/entity/create',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.createEntity(req,res);})});
-server.get('/entity/get',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.getEntity(req,res);})});
-server.get('/wit/getEntityById',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.getEntityById(req,res);})});
-server.get('/wit/getEntities',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.getEntities(req,res);})});
-server.post('/wit/putEntityById',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.putEntityById(req,res);})});
-server.post('/wit/postEntity',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.postEntity(req,res);})});
-server.get('/wit/getMessage',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.getMessage(req,res);})});
-server.post('/wit/postSample',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.postSample(req,res);})});
+server.get(
+    "/intent/get",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        dashboardController.getIntent(req,res);
+    }
+);
+server.post(
+    "/intent/delete",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        dashboardController.deleteIntent(req,res);
+    }
+);
+server.post(
+    "/entity/create",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        dashboardController.createEntity(req,res);
+    }
+);
+server.get(
+    "/entity/get",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        dashboardController.getEntity(req,res);
+    }
+);
+server.get(
+    "/wit/getEntityById",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        witController.getEntityById(req,res);
+    }
+);
+server.get(
+    "/wit/getEntities",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        witController.getEntities(req,res);
+    }
+);
+server.post(
+    "/wit/putEntityById",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        witController.putEntityById(req,res);
+    }
+);
+server.post(
+    "/wit/postEntity",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        witController.postEntity(req,res);
+    }
+);
+server.get(
+    "/wit/getMessage",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        witController.getMessage(req,res);
+    }
+);
+server.post(
+    "/wit/postSample",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        witController.postSample(req,res);
+    }
+);
 
 //Backup route
 // server.post('/api/messages', connector.listen());
@@ -115,6 +173,7 @@ server.post('/wit/postSample',function (req,res) {token_validator.tokenAuth(req,
 //User Authentication Routes
 server.post('user/create', userController.register);
 server.post('user/login', userController.login);
+//---------------------------------------------------------------------------------------------------------
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {
