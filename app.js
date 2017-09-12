@@ -20,6 +20,7 @@ models.sequelize.sync().then(function () {
 const mainController = require('./controller/mainController');
 const dashboardController = require('./controller/dashboardController');
 const witController = require('./controller/witController');
+const userController = require('./controller/userController');
 
 //Manage sessions
 const sessions = {};
@@ -65,6 +66,10 @@ server.post('/wit/putEntityById', witController.putEntityById);
 server.post('/wit/postEntity', witController.postEntity);
 server.get('/wit/getMessage', witController.getMessage);
 server.post('/wit/postSample', witController.postSample);
+
+//User Authentication Routes
+server.post('user/create', userController.register);
+server.post('user/login', userController.login);
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {
