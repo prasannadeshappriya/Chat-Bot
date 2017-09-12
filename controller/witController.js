@@ -4,11 +4,6 @@
 const request = require('request');
 const wit_content_type = 'application/json';
 
-function print_request(route){
-    let url_domain = 'http://localhost:3000';
-    console.log(url_domain + '/wit' + route);
-}
-
 function getWitServerAccessToken(){
     let token = '6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH';
     return 'Bearer ' + token;
@@ -16,7 +11,6 @@ function getWitServerAccessToken(){
 
 module.exports = {
     getEntityById: async function(req,res){
-        print_request('getEntityById');
         let entity_name = req.query.entity_name;
         if(typeof entity_name==='undefined' || entity_name===''){
             return res.json(400,{message: 'entity_name is required'});}
@@ -32,7 +26,6 @@ module.exports = {
         });
     },
     getEntities: async function(req,res){
-        print_request('getEntities');
         let url = 'https://api.wit.ai/entities?v=20170307';
         request({
             method: 'GET', url: url,
@@ -45,7 +38,6 @@ module.exports = {
         });
     },
     putEntityById: async function(req,res){
-        print_request('putEntityById');
         let entity_name = req.body.entity_name;
         let wit_doc = req.body.wit_doc;
         let wit_values = req.body.wit_values;
@@ -74,7 +66,6 @@ module.exports = {
         });
     },
     postEntity: async function(req,res){
-        print_request('postEntity');
         let wit_doc = req.body.doc;
         let wit_id = req.body.id;
         let wit_lookups = req.body.lookups;
@@ -128,7 +119,6 @@ module.exports = {
         });
     },
     getMessage: async function(req,res){
-        print_request('getMessage');
         let message = req.query.message;
         if(typeof message==='undefined' || message===''){
             return res.json(400,{message: 'message is required'});}
@@ -145,7 +135,6 @@ module.exports = {
         });
     },
     postSample: async function(req,res){
-        print_request('postSample');
         let text = req.body.text;
         let entities = req.body.entities;
         if(typeof text==='undefined' || text===''){

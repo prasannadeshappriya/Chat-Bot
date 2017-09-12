@@ -16,6 +16,9 @@ models.sequelize.sync().then(function () {
 });
 //---------------------------------------------------------------
 
+//Token validator
+let token_validator = require('./middleware/auth');
+
 //Controllers
 const mainController = require('./controller/mainController');
 const dashboardController = require('./controller/dashboardController');
@@ -34,6 +37,31 @@ server.use(restify_plugin.jsonp());
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.jsonBodyParser());
 server.use(restify.plugins.urlEncodedBodyParser({ extended: false }));
+
+function corsHandler(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
+    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader('Access-Control-Expose-Headers', 'X-Api-Version, X-Request-Id, X-Response-Time');
+    res.setHeader('Access-Control-Max-Age', '1000');
+    return next();
+}
+
+function optionsRoute(req, res, next) {
+    res.send(200);
+    return next();
+}
+
+server.use(cors({
+    credentials: true,                 // defaults to false
+    methods: ['GET','PUT','DELETE','POST','OPTIONS']
+}));
+
+/*
+ routes and authentication handlers
+ */
+
+server.opts('/\.*/', corsHandler, optionsRoute);
 
 server.listen(process.env.port || process.env.PORT || 3000, function () {
     console.log('%s message server listening to %s', server.name, server.url);
@@ -55,17 +83,33 @@ let bot = new builder.UniversalBot(connector);
 
 //Message server routes
 server.post('/api/messages', connector.listen());
-server.post('/intent/create', dashboardController.createIntent);
-server.get('/intent/get', dashboardController.getIntent);
-server.post('/intent/delete', dashboardController.deleteIntent);
-server.post('/entity/create', dashboardController.createEntity);
-server.get('/entity/get', dashboardController.getEntity);
-server.get('/wit/getEntityById', witController.getEntityById);
-server.get('/wit/getEntities', witController.getEntities);
-server.post('/wit/putEntityById', witController.putEntityById);
-server.post('/wit/postEntity', witController.postEntity);
-server.get('/wit/getMessage', witController.getMessage);
-server.post('/wit/postSample', witController.postSample);
+
+//Server routes
+server.post('/intent/create',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.createIntent(req,res);})});
+server.get('/intent/get',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.getIntent(req,res);})});
+server.post('/intent/delete',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.deleteIntent(req,res);})});
+server.post('/entity/create',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.createEntity(req,res);})});
+server.get('/entity/get',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.getEntity(req,res);})});
+server.get('/wit/getEntityById',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.getEntityById(req,res);})});
+server.get('/wit/getEntities',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.getEntities(req,res);})});
+server.post('/wit/putEntityById',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.putEntityById(req,res);})});
+server.post('/wit/postEntity',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.postEntity(req,res);})});
+server.get('/wit/getMessage',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.getMessage(req,res);})});
+server.post('/wit/postSample',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {witController.postSample(req,res);})});
+
+//Backup route
+// server.post('/api/messages', connector.listen());
+// server.post('/intent/create', dashboardController.createIntent);
+// server.get('/intent/get', dashboardController.getIntent);
+// server.post('/intent/delete', dashboardController.deleteIntent);
+// server.post('/entity/create', dashboardController.createEntity);
+// server.get('/entity/get', dashboardController.getEntity);
+// server.get('/wit/getEntityById', witController.getEntityById);
+// server.get('/wit/getEntities', witController.getEntities);
+// server.post('/wit/putEntityById', witController.putEntityById);
+// server.post('/wit/postEntity', witController.postEntity);
+// server.get('/wit/getMessage', witController.getMessage);
+// server.post('/wit/postSample', witController.postSample);
 
 //User Authentication Routes
 server.post('user/create', userController.register);
