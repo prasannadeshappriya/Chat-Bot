@@ -36,5 +36,6 @@ db.Sequelize = Sequelize;
 db.entity =require('../models/entity')(sequelize,Sequelize);
 db.intent =require('../models/intent')(sequelize,Sequelize);
 db.settings =require('../models/settings')(sequelize,Sequelize);
+db.user =require('../models/user')(sequelize,Sequelize);
 
 module.exports = db;
