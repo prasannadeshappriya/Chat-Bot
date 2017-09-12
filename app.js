@@ -17,6 +17,7 @@ models.sequelize.sync().then(function () {
 //---------------------------------------------------------------
 
 //Token validator
+const passport = require('./middleware/passport');
 let token_validator = require('./middleware/auth');
 
 //Controllers
@@ -38,6 +39,7 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.jsonBodyParser());
 server.use(restify.plugins.urlEncodedBodyParser({ extended: false }));
 
+//Handle restify server cores headers ---------------------------------------------------------------------
 function corsHandler(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
@@ -46,22 +48,13 @@ function corsHandler(req, res, next) {
     res.setHeader('Access-Control-Max-Age', '1000');
     return next();
 }
-
-function optionsRoute(req, res, next) {
-    res.send(200);
-    return next();
-}
-
+function optionsRoute(req, res, next) {res.send(200);return next();}
 server.use(cors({
     credentials: true,                 // defaults to false
     methods: ['GET','PUT','DELETE','POST','OPTIONS']
 }));
-
-/*
- routes and authentication handlers
- */
-
 server.opts('/\.*/', corsHandler, optionsRoute);
+//---------------------------------------------------------------------------------------------------  ------
 
 server.listen(process.env.port || process.env.PORT || 3000, function () {
     console.log('%s message server listening to %s', server.name, server.url);
@@ -83,6 +76,14 @@ let bot = new builder.UniversalBot(connector);
 
 //Message server routes
 server.post('/api/messages', connector.listen());
+
+server.get(
+    "/getJobTypes",
+    passport.authenticate('jwt', {session :false}),
+    function (req,res) {
+        return res.json(200,{status: 'done'});
+    }
+);
 
 //Server routes
 server.post('/intent/create',function (req,res) {token_validator.tokenAuth(req,res, function (req,res) {dashboardController.createIntent(req,res);})});
