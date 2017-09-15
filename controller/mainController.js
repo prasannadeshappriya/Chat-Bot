@@ -18,7 +18,12 @@ module.exports = {
                 if(typeof sessions[key].context.address !== 'undefined'){
                     let address = sessions[key].context.address;
                     let msg = new builder.Message().address(address);
-                    msg.text(message);msg.textLocale('en-US');
+                    let user_message;
+                    for(let i=0; i<message.length; i++){
+                        if(i===0){user_message=message[i];}
+                        else{user_message = user_message + '\n\n' + message[i];}
+                    }
+                    msg.text(user_message);msg.textLocale('en-US');
                     let tmp_obj = {name: sessions[key].context.name, id: sessions[key].context.id};
                     users.push(tmp_obj);
                     bot.send(msg);

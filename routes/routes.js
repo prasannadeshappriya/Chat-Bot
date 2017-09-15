@@ -13,9 +13,10 @@ module.exports = function (server,passport,connector,bot,builder) {
         passport.authenticate('jwt', {session :false}),
         async function (req,res) {
             let message = req.body.message;
+            let test = message.split('\n');
             if(typeof message === 'undefined' ||
                 message === ''){return res.send(400,{message: 'message required'});}
-            let result = await mainController.sendBroadcastMessage(bot,builder,message);
+            let result = await mainController.sendBroadcastMessage(bot,builder,message.split('\n'));
             return res.send(200,{sent_users: result});
         }
     );
