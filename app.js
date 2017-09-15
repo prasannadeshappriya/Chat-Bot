@@ -18,13 +18,9 @@ models.sequelize.sync().then(function () {
 
 //Token validator
 const passport = require('./middleware/passport');
-let token_validator = require('./middleware/auth');
 
 //Controllers
 const mainController = require('./controller/mainController');
-const dashboardController = require('./controller/dashboardController');
-const witController = require('./controller/witController');
-const userController = require('./controller/userController');
 
 //Manage sessions
 const sessions = {};
@@ -61,119 +57,21 @@ server.listen(process.env.port || process.env.PORT || 3000, function () {
 });
 
 // Microsoft bot framework
-//Sithara
-// var connector = new builder.ChatConnector({
-//     appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
-//     appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
-// });
-//Prasanna
+// Sithara
 let connector = new builder.ChatConnector({
-    appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
-    appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
+    appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
+    appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
 });
+//Prasanna
+// let connector = new builder.ChatConnector({
+//     appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
+//     appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
+// });
 
 let bot = new builder.UniversalBot(connector);
 
-//Message server routes
-server.post('/api/messages', connector.listen());
-
-//Server routes--------------------------------------------------------------------------------------------
-server.post(
-    "/intent/create",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        dashboardController.createIntent(req,res);
-    }
-);
-server.get(
-    "/intent/get",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        dashboardController.getIntent(req,res);
-    }
-);
-server.post(
-    "/intent/delete",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        dashboardController.deleteIntent(req,res);
-    }
-);
-server.post(
-    "/entity/create",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        dashboardController.createEntity(req,res);
-    }
-);
-server.get(
-    "/entity/get",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        dashboardController.getEntity(req,res);
-    }
-);
-server.get(
-    "/wit/getEntityById",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        witController.getEntityById(req,res);
-    }
-);
-server.get(
-    "/wit/getEntities",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        witController.getEntities(req,res);
-    }
-);
-server.post(
-    "/wit/putEntityById",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        witController.putEntityById(req,res);
-    }
-);
-server.post(
-    "/wit/postEntity",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        witController.postEntity(req,res);
-    }
-);
-server.get(
-    "/wit/getMessage",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        witController.getMessage(req,res);
-    }
-);
-server.post(
-    "/wit/postSample",
-    passport.authenticate('jwt', {session :false}),
-    function (req,res) {
-        witController.postSample(req,res);
-    }
-);
-
-//Backup route
-// server.post('/api/messages', connector.listen());
-// server.post('/intent/create', dashboardController.createIntent);
-// server.get('/intent/get', dashboardController.getIntent);
-// server.post('/intent/delete', dashboardController.deleteIntent);
-// server.post('/entity/create', dashboardController.createEntity);
-// server.get('/entity/get', dashboardController.getEntity);
-// server.get('/wit/getEntityById', witController.getEntityById);
-// server.get('/wit/getEntities', witController.getEntities);
-// server.post('/wit/putEntityById', witController.putEntityById);
-// server.post('/wit/postEntity', witController.postEntity);
-// server.get('/wit/getMessage', witController.getMessage);
-// server.post('/wit/postSample', witController.postSample);
-
-//User Authentication Routes
-server.post('user/create', userController.register);
-server.post('user/login', userController.login);
-//---------------------------------------------------------------------------------------------------------
+//Server routes
+require('./routes/routes')(server,passport,connector,bot,builder);
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {
@@ -202,6 +100,7 @@ String.prototype.contains = function(content){
 bot.dialog('/', mainController.sendMessage);
 
 module.exports = sessions;
-module.exports = server;
+// module.exports = server;
+// module.exports = bot;
 // module.exports = app;
 
