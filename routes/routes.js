@@ -14,11 +14,9 @@ module.exports = function (server,passport,connector,bot,builder) {
         async function (req,res) {
             let message = req.body.message;
             if(typeof message === 'undefined' ||
-                message === ''){
-                return res.send(400,{message: 'message required'});
-            }
+                message === ''){return res.send(400,{message: 'message required'});}
             let result = await mainController.sendBroadcastMessage(bot,builder,message);
-            return res.send(200,result);
+            return res.send(200,{sent_users: result});
         }
     );
     //Message server routes

@@ -100,7 +100,4 @@ String.prototype.contains = function(content){
 bot.dialog('/', mainController.sendMessage);
 
 module.exports = sessions;
-// module.exports = server;
-// module.exports = bot;
-// module.exports = app;
 

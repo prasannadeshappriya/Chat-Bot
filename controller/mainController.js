@@ -11,23 +11,22 @@ const rn= require('random-number');
 
 module.exports = {
     sendBroadcastMessage: async function(bot,builder,message){
-        let count = 0;
+        let users = [];
         await Object.keys(sessions)
             .forEach(function (key) {
                 let user = sessions[key];
                 if(typeof sessions[key].context.address !== 'undefined'){
                     let address = sessions[key].context.address;
                     let msg = new builder.Message().address(address);
-                    msg.text(message);
-                    msg.textLocale('en-US');
-                    count++;
+                    msg.text(message);msg.textLocale('en-US');
+                    let tmp_obj = {name: sessions[key].context.name, id: sessions[key].context.id};
+                    users.push(tmp_obj);
                     bot.send(msg);
                 }
             });
-        return {count: count};
+        return users;
     },
     sendMessage: async function (session) {
-        console.log(sessions);
         console.log('---------User Details------------');
         console.log(session.message.user.id);
         console.log(session.message.user.name);
@@ -52,7 +51,11 @@ module.exports = {
         if (!sessionId) {
             // No session found for user fbid, let's create a new one
             sessionId = session.message.user.id;
-            sessions[sessionId] = {fbid: fbid, context: {address: session.message.address}};
+            sessions[sessionId] = {fbid: fbid, context: {
+                address: session.message.address,
+                id: session.message.user.id,
+                name: session.message.user.name,
+            }};
         }
         //----------------------------------------------------------------------------------------------------
 
