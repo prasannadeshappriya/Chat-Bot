@@ -5,6 +5,7 @@ const dashboardController = require('../controller/dashboardController');
 const witController = require('../controller/witController');
 const userController = require('../controller/userController');
 const mainController = require('../controller/mainController');
+const settingsController = require('../controller/settingsController');
 
 module.exports = function (server,passport,connector,bot,builder) {
     //Broadcast message
@@ -61,6 +62,21 @@ module.exports = function (server,passport,connector,bot,builder) {
             dashboardController.getEntity(req,res);
         }
     );
+    server.post(
+        "/settings/update",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            settingsController.updateSettings(req,res);
+        }
+    );
+    server.get(
+        "/settings/get",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            settingsController.getSettings(req,res);
+        }
+    );
+    //Wit.AI server routes
     server.get(
         "/wit/getEntityById",
         passport.authenticate('jwt', {session :false}),
