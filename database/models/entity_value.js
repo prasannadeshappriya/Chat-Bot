@@ -1,12 +1,16 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  let entity = sequelize.define('entity', {
-    name: {
-      type: DataTypes.STRING,
+  var entity_value = sequelize.define('entity_value', {
+    entity_id: {
+      type:DataTypes.INTEGER,
       allowNull: false,
     },
-    description: {
-      type: DataTypes.STRING,
+    value: {
+      type:DataTypes.STRING,
+      allowNull: false,
+    },
+    data: {
+      type:DataTypes.STRING(10000),
       allowNull: false,
     }
   }, {
@@ -16,5 +20,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  return entity;
+  return entity_value;
 };
