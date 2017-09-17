@@ -38,7 +38,11 @@ server.use(restify.plugins.urlEncodedBodyParser({ extended: false }));
 //Handle restify server cores headers ---------------------------------------------------------------------
 function corsHandler(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, X-Response-Time, X-PINGOTHER, X-CSRF-Token,Authorization');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Accept-Version, ' +
+        'Content-Length, Content-MD5, Content-Type, Date, ' +
+        'X-Api-Version, X-Response-Time, X-PINGOTHER, ' +
+        'X-CSRF-Token,Authorization'
+    );
     res.setHeader('Access-Control-Allow-Methods', '*');
     res.setHeader('Access-Control-Expose-Headers', 'X-Api-Version, X-Request-Id, X-Response-Time');
     res.setHeader('Access-Control-Max-Age', '1000');
@@ -58,15 +62,15 @@ server.listen(process.env.port || process.env.PORT || 3000, function () {
 
 // Microsoft bot framework
 // Sithara
-let connector = new builder.ChatConnector({
-    appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
-    appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
-});
-//Prasanna
 // let connector = new builder.ChatConnector({
-//     appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
-//     appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
+//     appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
+//     appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
 // });
+//Prasanna
+let connector = new builder.ChatConnector({
+    appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
+    appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
+});
 
 let bot = new builder.UniversalBot(connector);
 

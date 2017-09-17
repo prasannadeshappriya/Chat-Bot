@@ -2,6 +2,10 @@
  * Created by prasanna_d on 9/4/2017.
  */
 const request = require('request');
+//Repositories
+const entity_repo = require('../repositories/entityRepo');
+
+//App constants
 const wit_content_type = 'application/json';
 
 function getWitServerAccessToken(){
@@ -10,6 +14,23 @@ function getWitServerAccessToken(){
 }
 
 module.exports = {
+    deleteEntity: async function(req,res) {
+        let entity_name = req.body.entity_name;
+        if(typeof entity_name==='undefined' || entity_name===''){
+            return res.json(400,{message: 'entity_name is required'});}
+        let url = 'https://api.wit.ai/entities/'+ entity_name +'?v=20170307';
+        request({
+            method: 'DELETE', url: url,
+            headers: {
+                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+            }
+        }, async function (err, wit_res) {
+            if (err) {return res.json(500,{message: 'Internal sever error'});}
+            entity_repo.deleteEntity(entity_name,function (result) {
+                return res.json(200,{data: JSON.parse(wit_res.body), message: result});
+            });
+        });
+    },
     getEntityById: async function(req,res){
         let entity_name = req.query.entity_name;
         if(typeof entity_name==='undefined' || entity_name===''){
@@ -20,10 +41,13 @@ module.exports = {
             headers: {
                 'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
-        }, function (err, wit_res) {
+        }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
-            return res.json(200,{data: JSON.parse(wit_res.body)});
+            entity_repo.getEntityValues(entity_name,function (result) {
+                return res.json(200,{data: JSON.parse(wit_res.body), values: result});
+            });
         });
+
     },
     getEntities: async function(req,res){
         let url = 'https://api.wit.ai/entities?v=20170307';

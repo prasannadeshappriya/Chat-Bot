@@ -14,7 +14,6 @@ module.exports = function (server,passport,connector,bot,builder) {
         passport.authenticate('jwt', {session :false}),
         async function (req,res) {
             let message = req.body.message;
-            let test = message.split('\n');
             if(typeof message === 'undefined' ||
                 message === ''){return res.send(400,{message: 'message required'});}
             let result = await mainController.sendBroadcastMessage(bot,builder,message.split('\n'));
@@ -49,19 +48,27 @@ module.exports = function (server,passport,connector,bot,builder) {
         }
     );
     server.post(
+        "/entity/update",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            dashboardController.updateEntity(req,res);
+        }
+    );
+    server.post(
+        "/entity/delete",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            dashboardController.deleteEntityValue(req,res);
+        }
+    );
+    server.post(
         "/entity/create",
         passport.authenticate('jwt', {session :false}),
         function (req,res) {
             dashboardController.createEntity(req,res);
         }
     );
-    server.get(
-        "/entity/get",
-        passport.authenticate('jwt', {session :false}),
-        function (req,res) {
-            dashboardController.getEntity(req,res);
-        }
-    );
+
     server.post(
         "/settings/update",
         passport.authenticate('jwt', {session :false}),
@@ -82,6 +89,13 @@ module.exports = function (server,passport,connector,bot,builder) {
         passport.authenticate('jwt', {session :false}),
         function (req,res) {
             witController.getEntityById(req,res);
+        }
+    );
+    server.post(
+        "/wit/deleteEntity",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            witController.deleteEntity(req,res);
         }
     );
     server.get(

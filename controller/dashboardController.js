@@ -1,7 +1,8 @@
 /**
  * Created by prasanna_d on 8/31/2017.
  */
-const models = require('../database/models');
+const entity_repo = require('../repositories/entityRepo');
+const intent_repo = require('../repositories/intentRepo');
 
 module.exports = {
     createEntity: async function(req,res){
@@ -14,47 +15,60 @@ module.exports = {
             return res.json(400,{message: 'entity_data is required'});}
         if(typeof entity_description==='undefined' || entity_description===''){
             return res.json(400,{message: 'entity_description is required'});}
-        let db_response = await models.entity.findOrCreate({
-            where: {
-                name: entity_name
-            },
-            defaults: {
-                name: entity_name,
-                entity_dis: entity_data,
-                description: entity_description
-            }
-        });
-        if(db_response[1]){
-            return res.json(201,{message: 'entity created'});
-        }
-        return res.json(409,{message: 'entity already exist'});
-    },
-    getEntity: async function(req,res){
-        let entity_id = req.query.entityid;
-        if(typeof entity_id==='undefined' || entity_id===''){
-            return res.json(400,{message: 'entity_id is required'});
-        }
-        let resData = [];   //Return Data
-        let entities = await models.entity.findAll();
+        try{
+            entity_data = JSON.parse(entity_data);
+        }catch (err){res.send(400,{message: 'entity_data should be in json format, parse error'});}
+
         try {
-            Object.keys(entities).forEach(function (key) {
-                resData.push({
-                    id: entities[key].dataValues.intent_id,
-                    name: entities[key].dataValues.name,
-                    description: entities[key].dataValues.description,
-                });
+            entity_repo.createEntity(entity_name, entity_description, function (callback) {
+                if (callback[1]) {
+                    let entity_id = callback[0].dataValues.id;
+                    let entity_values = [];
+                    try {
+                        for (let i = 0; i < entity_data.length; i++) {
+                            let item = entity_data[i];
+                            let tmp_obj = {entity_id: entity_id, value: item.value, data: item.data};
+                            entity_values.push(tmp_obj)
+                        }
+                        entity_repo.bulkCreateEntity(entity_values,function (callback) {
+                            return res.json(201,{message: 'entity created', data: callback});
+                        });
+                    }catch (err){return res.json(500,{message: 'internal server error'});}
+                } else{return res.json(409,{message: 'entity already exist'});}
             });
-            for(let i=0; i<resData.length; i++){
-                let intent = await models.intent.findOne({
-                    where: {id: resData[i].id}
-                });
-                if(intent) {resData[i]['intent_name'] = intent.dataValues.name;}
-                else{resData[i]['intent_name'] = 'Error_Intent';}
-            }
-            return res.json(200, {data: resData});
-        }catch (err){
-            return res.json(500, {message: 'internal server error'});
-        }
+        }catch (err){return res.json(500,{message: 'internal server error'});}
+    },
+    updateEntity: async function(req,res){
+        let entity_name = req.body.entity_name;
+        let entity_value = req.body.entity_value;
+        let entity_data = req.body.entity_data;
+        if(typeof entity_name==='undefined' || entity_name===''){
+            return res.json(400,{message: 'entity_name is required'});}
+        if(typeof entity_value==='undefined' || entity_value===''){
+            return res.json(400,{message: 'entity_value is required'});}
+        if(typeof entity_data==='undefined' || entity_data===''){
+            return res.json(400,{message: 'entity_data is required'});}
+        entity_repo.updateEntityData(
+            entity_name,
+            entity_value,
+            entity_data,
+            function (callback) {
+                return res.json(201,{message: callback, method: 'update'});
+            });
+    },
+    deleteEntityValue: async function(req,res){
+        let entity_name = req.body.entity_name;
+        let entity_value = req.body.entity_value;
+        if(typeof entity_name==='undefined' || entity_name===''){
+            return res.json(400,{message: 'entity_name is required'});}
+        if(typeof entity_value==='undefined' || entity_value===''){
+            return res.json(400,{message: 'entity_value is required'});}
+        entity_repo.deleteEntityValue(
+            entity_name,
+            entity_value,
+            function (callback) {
+                return res.json(200,{message: callback, method: 'delete'});
+            });
     },
     createIntent: async function(req,res){
         let intent_name = req.body.intent_name;
@@ -66,19 +80,12 @@ module.exports = {
         if(typeof intent_description==='undefined' || intent_description===''){
             return res.json(400,{message: 'intent_description is required'});
         }
-        let db_response = await models.intent.findOrCreate({
-            where: {
-                name: intent_name
-            },
-            defaults: {
-                name: intent_name,
-                description: intent_description
+        intent_repo.createIntent(intent_name,intent_description,function (callback) {
+            if(callback[1]){
+                return res.json(201,{message: 'intent created'});
             }
+            return res.json(409,{message: 'intent already exist'});
         });
-        if(db_response[1]){
-            return res.json(201,{message: 'intent created'});
-        }
-        return res.json(409,{message: 'intent already exist'});
     },
     getIntent: async function(req,res){
         let intent_id = req.query.intentid;
@@ -87,15 +94,16 @@ module.exports = {
         }
         if(intent_id==='all'){
             let resData = [];   //Return Data
-            let intents = await models.intent.findAll();
-            Object.keys(intents)
-                .forEach(function (key) {
-                    resData.push({
-                        name: intents[key].dataValues.name,
-                        description: intents[key].dataValues.description,
+            intent_repo.getIntentAll(function (callback) {
+                Object.keys(callback)
+                    .forEach(function (key) {
+                        resData.push({
+                            name: callback[key].dataValues.name,
+                            description: callback[key].dataValues.description,
+                        });
                     });
-                });
-            return res.json(200,{data: resData});
+                return res.json(200,{data: resData});
+            })
         }else{
             return res.send(501).json({message: 'This section is not implemented'});
         }
@@ -105,12 +113,11 @@ module.exports = {
         if(typeof intent_name==='undefined' || intent_name===''){
             return res.json(400,{message: 'intent_name is required'});
         }
-        let result = await models.intent.destroy({
-            where: {name: intent_name}
+        intent_repo.deleteIntent(intent_name,function (callback) {
+            if(callback){
+                return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
+            }
+            return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
         });
-        if(result){
-            return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
-        }
-        return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
     }
 };
