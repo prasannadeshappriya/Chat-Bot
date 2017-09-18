@@ -4,7 +4,7 @@
 const request = require('request');
 //Repositories
 const entity_repo = require('../repositories/entityRepo');
-const settings_repo = require('../repositories/settings.Repo');
+const settings_repo = require('../repositories/settingsRepo');
 
 //App constants
 const wit_content_type = 'application/json';

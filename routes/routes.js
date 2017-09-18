@@ -40,6 +40,13 @@ module.exports = function (server,passport,connector,bot,builder) {
             dashboardController.getIntent(req,res);
         }
     );
+    server.get(
+        "/entity/getEntityData",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            dashboardController.getEntityData(req,res);
+        }
+    );
     server.post(
         "/intent/delete",
         passport.authenticate('jwt', {session :false}),

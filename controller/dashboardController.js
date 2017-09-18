@@ -136,5 +136,19 @@ module.exports = {
         entity_repo.updateOrCreateEntityValue(entity_name, entity_value, entity_data, function (callback) {
             return res.json(200,{message: callback});
         });
+    },
+    getEntityData: async function(req,res){
+        let entity_name = req.query.entity_name;
+        let entity_value = req.query.entity_value;
+        if(typeof entity_name==='undefined'){entity_name = '';}
+        if(typeof entity_value==='undefined'){entity_value = '';}
+        entity_repo.getEntityData(entity_name, entity_value, function (callback, entity_value) {
+            if(callback) {
+                if(!entity_value){return res.json(200, {message: callback, entity_data: ''});}
+                if(typeof entity_value.data!=='undefined') {
+                    return res.json(200, {message: callback, entity_data: entity_value.data});
+                }else{return res.json(200, {message: callback, entity_data: ''});}
+            }else{return res.json(200, {message: callback, entity_data: ''});}
+        });
     }
 };

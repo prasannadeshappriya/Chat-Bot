@@ -13,6 +13,26 @@ module.exports = {
         });
         callback(result);
     },
+    getEntityData: async function(name, value, callback){
+        let result = await models.entity.findOne({
+            where:{name: name}
+        });
+        if(result) {
+            let entity_id = result.dataValues.id;
+            if(value){
+                result = await models.entity_data.findOne({
+                    where: {entity_id: entity_id, value: value}
+                });
+                return callback(true, result);
+            }else{
+                result = await models.entity_data.findAll({
+                    where: {entity_id: entity_id}
+                });
+                return callback(true, result);
+            }
+        }
+        return callback(false, null);
+    },
     updateOrCreateEntityValue: async function(entity_name, entity_value, entity_data, callback){
         let result = await models.entity.findOne({
             where:{name: entity_name}
