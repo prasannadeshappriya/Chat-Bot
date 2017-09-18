@@ -119,5 +119,25 @@ module.exports = {
             }
             return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
         });
+    },
+    createOrUpdateEntityValue: async function(req,res){
+        let entity_name = req.body.entity_name;
+        let entity_value = req.body.entity_value;
+        let entity_data = req.body.entity_data;
+        if(typeof entity_name==='undefined' || entity_name===''){
+            return res.json(400,{message: 'entity_name is required'});
+        }
+        if(typeof entity_value==='undefined' || entity_value===''){
+            return res.json(400,{message: 'entity_value is required'});
+        }
+        if(typeof entity_data==='undefined' || entity_data===''){
+            return res.json(400,{message: 'entity_data is required'});
+        }
+        entity_repo.updateOrCreateEntityValue(entity_name, entity_value, entity_data, function (callback) {
+            if(callback){
+                return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
+            }
+            return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
+        });
     }
 };

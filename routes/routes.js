@@ -68,7 +68,13 @@ module.exports = function (server,passport,connector,bot,builder) {
             dashboardController.createEntity(req,res);
         }
     );
-
+    server.post(
+        "/entity/createOrUpdateEntityValue",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            dashboardController.createOrUpdateEntityValue(req,res);
+        }
+    );
     server.post(
         "/settings/update",
         passport.authenticate('jwt', {session :false}),
