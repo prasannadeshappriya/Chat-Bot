@@ -26,7 +26,6 @@ module.exports = {
     getSettings: async function(req,res){
         try {
             let result = await model.settings.findAll();
-            console.log(result);
             return res.json(201, {message: 'Success', settings: result[0].dataValues});
         }catch (err){return res.json(500, {message: 'internal server error'});}
     }

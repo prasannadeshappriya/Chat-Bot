@@ -31,8 +31,19 @@ module.exports = {
                 });
             }
             return callback(true);
+        }else{
+            result = await models.entity.create({
+                name: entity_name,
+                description: 'User-defined entity'
+            });
+            let entity_id = result.dataValues.id;
+            result = await models.entity_data.create({
+                entity_id: entity_id,
+                value: entity_value,
+                data: entity_data
+            });
+            return callback(true);
         }
-        callback(false);
     },
     deleteEntity: async function(entity_name, callback){
         let result = await models.entity.findOne({

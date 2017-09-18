@@ -4,12 +4,16 @@
 const request = require('request');
 //Repositories
 const entity_repo = require('../repositories/entityRepo');
+const settings_repo = require('../repositories/settings.Repo');
 
 //App constants
 const wit_content_type = 'application/json';
 
-function getWitServerAccessToken(){
-    let token = '6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH';
+async function getWitServerAccessToken(){
+    let token;
+    await settings_repo.getToken(function (app_token) {
+        token = app_token;
+    });
     return 'Bearer ' + token;
 }
 
@@ -22,7 +26,7 @@ module.exports = {
         request({
             method: 'DELETE', url: url,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -39,7 +43,7 @@ module.exports = {
         request({
             method: 'GET', url: url,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -54,7 +58,7 @@ module.exports = {
         request({
             method: 'GET', url: url,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -82,7 +86,7 @@ module.exports = {
             method: 'PUT', url: url,
             json: body,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -134,7 +138,7 @@ module.exports = {
             method: 'POST', url: url,
             json: body,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             console.log(wit_res.body);
@@ -151,7 +155,7 @@ module.exports = {
         request({
             method: 'GET', url: url,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -179,7 +183,7 @@ module.exports = {
             method: 'POST', url: url,
             json: body,
             headers: {
-                'Authorization': getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}

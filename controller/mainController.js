@@ -3,11 +3,18 @@
  */
 const {Wit, log} = require('node-wit');
 const {interactive} = require('node-wit');
+const rn= require('random-number');
+
+//Sessions manage
+const sessions = require('../app');
+
+//Controllers
 const leaveController = require('../bot_controller/leaveController');
 const userController = require('../bot_controller/userController');
 const leavePolicyController = require('../bot_controller/leavePolicyController');
-const sessions = require('../app');
-const rn= require('random-number');
+
+//Repositories
+const settingsRepository = require('../repositories/settings.Repo');
 
 module.exports = {
     sendBroadcastMessage: async function(bot,builder,message){
@@ -41,7 +48,13 @@ module.exports = {
         //---------------------------------Token and session management---------------------------------------
         // let accessToken = 'OLKGXMXBYBDOHC7R3F64J6F3JVW55YLY';
         // let accessToken = '6PN2II4QPW5UYG3VPR6EXWFRU6MTTFBH';
-        let accessToken = 'IJGWDAD3JJUDWNQYYXOANYHHQXOR5FER';
+        // let accessToken = 'IJGWDAD3JJUDWNQYYXOANYHHQXOR5FER';    //Working accessToken
+
+        let accessToken;
+        await settingsRepository.getToken(function (token) {
+            accessToken = token;
+        });
+
         const client = new Wit({accessToken: accessToken});
         interactive(client);
 

@@ -134,10 +134,7 @@ module.exports = {
             return res.json(400,{message: 'entity_data is required'});
         }
         entity_repo.updateOrCreateEntityValue(entity_name, entity_value, entity_data, function (callback) {
-            if(callback){
-                return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
-            }
-            return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
+            return res.json(200,{message: callback});
         });
     }
 };
