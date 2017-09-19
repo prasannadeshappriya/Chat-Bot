@@ -24,7 +24,6 @@ const mainController = require('./controller/mainController');
 
 //Manage sessions
 const sessions = {};
-
 const restify_plugin = require('restify-plugins');
 
 // Setup Restify Server
@@ -101,6 +100,8 @@ String.prototype.contains = function(content){
     return this.indexOf(content) !== -1;
 };
 
+//Get all stored sessions in to the server from the database;
+mainController.init();
 bot.dialog('/', mainController.sendMessage);
 
 module.exports = sessions;

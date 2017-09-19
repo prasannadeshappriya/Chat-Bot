@@ -1,0 +1,52 @@
+problem
+This is the the place where employee can write their <b>problems</b>
+
+<b>Eg: Poor code quality, DTA targets not achieved, etc.</b>
+As a employee you can post your problems that you faced while working then you will find the solution with the help of the other team members. :)
+
+root-cause
+This is the section where employees can write the <b>root reason</b> for the each and every problem.
+Since <b>root course</b> is the <b>main reason</b> for any problem, we have to fix it first.
+Then problems will solve accordingly. :)
+
+solution
+This section is to write <b>solutions</b> for the <b>root courses.</b>
+One or many <b>solutions</b> might be there for one <b>problem</b>
+
+owner
+This is the person <b>who had the problem</b> and looking for solution. :)
+
+task
+This is the place where employees can write their day <b>tasks</b>. :)
+They can findout there tasks on the dashboard of the <b>jira</b> account. 
+Task's duration may depend on it's <b>requirement</b>. Some tasks may take <b>8 hours</b> and some take <b>less than 1 hour</b>.
+Either way, employee need to <b>estimate</b> a time for their task and write it in this section with the progress as a <b>pecentage.</b> :)
+
+capacity
+This section gives the idea about team member's <b>availability</b>. If a <b>employee has 8 hours work, his capacity is 100%</b>.
+Likewise employee need to write their capacity as a pecentage on this section.
+
+announcement
+This is the section where employees can see their up <b>comming events, news, tasks, messages and etc.</b>
+If there are any news, it should write on this section :)
+
+dsm_dsm_description
+This is the board dedicated to <b>each and every team.</b> It shows a brief summery about the team and their performance.
+DSM board has some <b>main sections</b>,
+1)<b>PRS section</b>
+2)<b>Task section</b>
+3)<b>Capacity section</b>
+4)<b>Announcement section</b>
+Tell me which section you would like to know?
+
+dsm_prs_description
+This section is for <b>problems, root-causes and solutions</b>
+Users can write their problems, reason for such problems and solutions in this section.
+There are few sections under PRS section and there are,
+1)<b>Problem section</b>
+2)<b>Root-cause section</b>
+3)<b>Solution section</b>
+4)<b>Owner section</b>
+Tell me which section you would like to know in PRS section of DSM board?
+
+mcn DSM board eka gena dala thiyenne, welawak thiyanawanm podk blpn (What is dsm board?) natural sentenses walin

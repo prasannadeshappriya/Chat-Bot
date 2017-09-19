@@ -16,6 +16,16 @@ const leavePolicyController = require('../bot_controller/leavePolicyController')
 //Repositories
 const settingsRepository = require('../repositories/settingsRepo');
 const entityRepository = require('../repositories/entityRepo');
+const sessionRepository = require('../repositories/sessionRepo');
+
+//Set the line break for message
+async function setLineBreaks(lines,callback) {
+    let output;
+    let data_arr = lines.split(' \\n\\n ');
+    if(data_arr.length>0){output=data_arr[0];}
+    if(data_arr.length>1){for(let i=1; i<data_arr.length; i++){output=output + '\n\n' + data_arr[i];}}
+    callback(output);
+}
 
 module.exports = {
     sendBroadcastMessage: async function(bot,builder,message){
@@ -39,6 +49,18 @@ module.exports = {
             });
         return users;
     },
+    init: async function(){
+        let sessionId;
+        //get all stored sessions from the database;
+        let stored_sessions = await sessionRepository.getAllSessions();
+        if(stored_sessions[0]) {
+            for (let i = 0; i < stored_sessions[1].length; i++){
+                let item = stored_sessions[1][i];
+                sessionId = item.dataValues.session_id;
+                sessions[sessionId] = JSON.parse(item.dataValues.session_data);
+            }
+        }
+    },
     sendMessage: async function (session) {
         console.log('---------User Details------------');
         console.log(session.message.user.id);
@@ -61,7 +83,7 @@ module.exports = {
 
         let fbid = session.message.user.id;
         let sessionId;
-        // Let's see if we already have a session for the user fbid
+
         Object.keys(sessions).forEach(k => {
             if (sessions[k].fbid === fbid) {
                 sessionId = k;
@@ -69,27 +91,29 @@ module.exports = {
         });
         if (!sessionId) {
             // No session found for user fbid, let's create a new one
+            console.log('--------------------Creating session for new user----------------------');
             sessionId = session.message.user.id;
-            sessions[sessionId] = {fbid: fbid, context: {
-                address: session.message.address,
-                id: session.message.user.id,
-                name: session.message.user.name,
-            }};
+            let session_data = {
+                fbid: fbid,
+                context: {
+                    address: session.message.address,
+                    id: session.message.user.id,
+                    name: session.message.user.name,
+                }
+            };
+            sessions[sessionId] = session_data;
+            let result = await sessionRepository.createOrUpdateSession(fbid,JSON.stringify(session_data));
+            if(result[0]){console.log('--------------------Session saved to database--------------------------');}
         }
         //----------------------------------------------------------------------------------------------------
 
         try {
             let data = await client.message(session.message.text.toLowerCase(), {});
             console.log('Wit.ai response: ' + JSON.stringify(data));
+
             //Set the default message
-            if(typeof sessions[sessionId].context.name==='undefined'){
-                let default_message="I am sorry. I don't know what you are asking " +
-                    ":(. For the moment I can help you with\n\n 1.Leave Policy";
-            }else{
-                let default_message="Hay " + sessions[sessionId].context.name + ", I am sorry." +
-                    " I don't know what you are asking :(.\n\n For the moment I can help you with,\n\n 1.Leave Policy";
-            }
-            let default_message="I am sorry. I don't know what you are asking :(. For the moment I can help you with\n\n 1.Leave Policy";
+            let default_message="Hay " + sessions[sessionId].context.name + ", I am sorry. I don't know what you are asking. :(";
+
             if(typeof data.entities !== 'undefined'){
                 let entity = null; let key='';
                 let entities = [];
@@ -107,29 +131,39 @@ module.exports = {
                         }
                     });
                 if(entities.length>0){entity = entities[0];}
+                let intent;
                 for(let i=0; i<entities.length; i++){
                     if(entity.confidence<entities[i].confidence){entity=entities[i];}
+                    if(entity.key==='intent'){intent=entities[i];}
+                }
+                if(intent){
+                    console.log('intent transaction');
                 }
                 if (entity) {
+                    let output;
                     console.log('---------Search Entity----------');
                     console.log(entity.key + ':');
                     console.log(entity);
                     console.log('--------------------------------');
                     if (entity.value === 'true') {
-                        await entityRepository.getEntityData(entity.key, null, function (flag, result) {
+                        await entityRepository.getEntityData(entity.key, null, async function (flag, result) {
                             if (flag) {
-                                let options = {min: 0, max: result.length, integer: true};
+                                let options = {min: 0, max: (result.length-1), integer: true};
                                 let data = result[rn(options)].dataValues.data;
-                                return session.send(data);
+                                await setLineBreaks(data,async function (output) {
+                                    return session.send(output);
+                                });
                             } else {
                                 return session.send(default_message);
                             }
                         });
                     } else {
-                        await entityRepository.getEntityData(entity.key, entity.value, function (flag, result) {
+                        await entityRepository.getEntityData(entity.key, entity.value, async function (flag, result) {
                             if (flag) {
                                 let data = result.dataValues.data;
-                                return session.send(data);
+                                await setLineBreaks(data,async function (output) {
+                                    return session.send(output);
+                                });
                             } else {
                                 return session.send(default_message);
                             }
@@ -137,55 +171,6 @@ module.exports = {
                     }
                 }else{return session.send(default_message);}
             }else {return session.send(default_message);}
-
-            // if(typeof data.entities.name!=='undefined'){
-            //     return userController.nameFunction(session, data, sessionId);
-            // }
-            // if(typeof data.entities.greetings!=='undefined' && data.entities.greetings[0].value==='true'){
-            //     return userController.helloFunction(session, data, sessionId);
-            // }
-            // //if user ask without telling their name
-            // if(typeof sessions[sessionId].context.name==="undefined"){
-            //     sessions[sessionId].context.preQuection = true;
-            //     let reply = ["I can help you. But before we begin, what is your name?",
-            //         "Let's start with your name",
-            //         "I need your name to continue :)"];
-            //     let options = {min: 0, max: 2, integer: true};
-            //     return session.send(reply[rn(options)]);
-            // }
-            // if(typeof data.entities.leave!=='undefined'){
-            //     return leaveController.leaveFunction(session, data, sessionId);
-            // }
-            // if(typeof data.entities.leavePolicy!=='undefined'){
-            //     return leavePolicyController.leavePolicyFunction(session, data, sessionId);
-            // }
-            // if(typeof data.entities.help!=='undefined'){
-            //     return userController.helpFunction(session, data, sessionId);
-            // }
-            // if(data._text.contains("thank")){
-            //     sessions[sessionId].context.controller = {};
-            //     let rpThank= ["You're Welcome...","No problem...","Don't mention it...","It's no bother...","My pleasure...","It's all right...","It's nothing"];
-            //     let smiley=[":D",":)","(like)","(yn)",";)","(nod)"];
-            //     let options={min:0, max: 6, integer: true};
-            //     session.send(rpThank[rn(options)]);
-            //     return session.send(smiley[rn(options)]);
-            // }
-            // if(typeof sessions[sessionId].context.controller!=='undefined'){
-            //     if(sessions[sessionId].context.controller.name==="leave"){
-            //         return leaveController.leaveFunction(session, data, sessionId);
-            //     }
-            // }
-            // if(typeof data.entities.fun!=='undefined'){
-            //     return session.send("Please ask me about the company policies and the problems regarding the company :)\n\n" +
-            //         "Don't tell me your personal problems :P");
-            // }
-            // if(typeof sessions[sessionId].context.name==='undefined'){
-            //     session.send("I am sorry. I don't know what you are asking :(. For the moment I can help you with\n\n" +
-            //         "1.Leave Policy");
-            // }else{
-            //     session.send("Hay " + sessions[sessionId].context.name + ", I am sorry. I don't know what you are asking :(.\n\n For the moment I can help you with,\n\n" +
-            //         "1.Leave Policy");
-            // }
         }catch (err){
             console.log(err);
         }

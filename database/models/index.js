@@ -38,5 +38,6 @@ db.intent =require('../models/intent')(sequelize,Sequelize);
 db.settings =require('../models/settings')(sequelize,Sequelize);
 db.user =require('../models/user')(sequelize,Sequelize);
 db.entity_data =require('../models/entity_value')(sequelize,Sequelize);
+db.sesson_user =require('../models/sesson_user')(sequelize,Sequelize);
 
 module.exports = db;
