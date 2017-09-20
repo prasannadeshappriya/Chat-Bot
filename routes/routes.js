@@ -33,6 +33,13 @@ module.exports = function (server,passport,connector,bot,builder) {
             dashboardController.createIntent(req,res);
         }
     );
+    server.post(
+        "/intent/update",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            dashboardController.updateIntent(req,res);
+        }
+    );
     server.get(
         "/intent/get",
         passport.authenticate('jwt', {session :false}),

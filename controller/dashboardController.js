@@ -73,6 +73,7 @@ module.exports = {
     createIntent: async function(req,res){
         let intent_name = req.body.intent_name;
         let intent_description = req.body.intent_description;
+        let intent_data = req.body.intent_data;
 
         if(typeof intent_name==='undefined' || intent_name===''){
             return res.json(400,{message: 'intent_name is required'});
@@ -80,11 +81,15 @@ module.exports = {
         if(typeof intent_description==='undefined' || intent_description===''){
             return res.json(400,{message: 'intent_description is required'});
         }
-        intent_repo.createIntent(intent_name,intent_description,function (callback) {
+        if(typeof intent_data==='undefined' || intent_data===''){
+            return res.json(400,{message: 'intent_data is required'});
+        }
+        intent_repo.createIntent(intent_name,intent_description, intent_data,function (callback) {
             if(callback[1]){
                 return res.json(201,{message: 'intent created'});
+            }else {
+                return res.json(409, {message: 'intent already exist'});
             }
-            return res.json(409,{message: 'intent already exist'});
         });
     },
     getIntent: async function(req,res){
@@ -105,8 +110,25 @@ module.exports = {
                 return res.json(200,{data: resData});
             })
         }else{
-            return res.send(501).json({message: 'This section is not implemented'});
+            intent_repo.getIntent(intent_id, function (callback) {
+
+                return res.json(200,{data: callback});
+            });
+            //return res.send(501).json({message: 'This section is not implemented'});
         }
+    },
+    updateIntent: async function(req,res){
+        let intent_name = req.body.intent_name;
+        let intent_data = req.body.intent_data;
+        if(typeof intent_data==='undefined' || intent_data===''){
+            return res.json(400,{message: 'intent_data is required'});
+        }
+        if(typeof intent_name==='undefined' || intent_name===''){
+            return res.json(400,{message: 'intent_name is required'});
+        }
+        await intent_repo.updateIntent(intent_name,intent_data,function (callback) {
+            return res.json(200,{data: callback});
+        });
     },
     deleteIntent: async function(req,res){
         let intent_name = req.body.intent_name;
@@ -114,10 +136,9 @@ module.exports = {
             return res.json(400,{message: 'intent_name is required'});
         }
         intent_repo.deleteIntent(intent_name,function (callback) {
-            if(callback){
+            if(callback[0]){
                 return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
-            }
-            return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});
+            }else{return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});}
         });
     },
     createOrUpdateEntityValue: async function(req,res){
