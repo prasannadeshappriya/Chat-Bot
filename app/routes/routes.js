@@ -1,11 +1,11 @@
 /**
  * Created by prasanna_d on 9/15/2017.
  */
-const dashboardController = require('../controller/dashboardController');
-const witController = require('../controller/witController');
-const userController = require('../controller/userController');
-const mainController = require('../controller/mainController');
-const settingsController = require('../controller/settingsController');
+const dashboardController = require('../controller/dashboard_controller');
+const witController = require('../controller/wit_controller');
+const userController = require('../controller/user_controller');
+const mainController = require('../controller/message_controller');
+const settingsController = require('../controller/settings_controller');
 
 module.exports = function (server,passport,connector,bot,builder) {
     //Broadcast message

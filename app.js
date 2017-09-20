@@ -8,7 +8,8 @@ const debug = require('debug')('hairb2b-server:server');
 const logger = require('morgan');
 const http = require('http');
 const cors = require('cors');
-const models = require('./database/models');
+const models = require('./app/database/models');
+const restify_plugin = require('restify-plugins');
 
 //Configure Database---------------------------------------------
 models.sequelize.sync().then(function () {
@@ -17,14 +18,13 @@ models.sequelize.sync().then(function () {
 //---------------------------------------------------------------
 
 //Token validator
-const passport = require('./middleware/passport');
+const passport = require('./app/middleware/passport');
 
 //Controllers
-const mainController = require('./controller/mainController');
+const mainController = require('./app/controller/message_controller');
 
 //Manage sessions
 const sessions = {};
-const restify_plugin = require('restify-plugins');
 
 // Setup Restify Server
 let server = restify.createServer();
@@ -74,7 +74,7 @@ let connector = new builder.ChatConnector({
 let bot = new builder.UniversalBot(connector);
 
 //Server routes
-require('./routes/routes')(server,passport,connector,bot,builder);
+require('./app/routes/routes')(server,passport,connector,bot,builder);
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {

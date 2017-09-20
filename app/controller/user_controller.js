@@ -5,7 +5,7 @@ const password_validator = require('password-validator');
 const pass_hash = require('password-hash');
 const models = require('../database/models');
 const jwt = require('jsonwebtoken');
-const auth_config = require('../auth_config/config');
+const auth_config = require('../config/config');
 
 module.exports = {
     login: async function(req,res){

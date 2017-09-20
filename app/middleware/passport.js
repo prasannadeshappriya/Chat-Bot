@@ -7,7 +7,7 @@ const passportJWT = require("passport-jwt");
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 
-const config = require('../auth_config/config');
+const config = require('../config/config');
 const models = require('../database/models');
 
 const jwtOptions = {};
