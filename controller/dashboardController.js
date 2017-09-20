@@ -111,10 +111,8 @@ module.exports = {
             })
         }else{
             intent_repo.getIntent(intent_id, function (callback) {
-
                 return res.json(200,{data: callback});
             });
-            //return res.send(501).json({message: 'This section is not implemented'});
         }
     },
     updateIntent: async function(req,res){
