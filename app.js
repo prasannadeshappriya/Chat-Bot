@@ -59,22 +59,18 @@ server.listen(process.env.port || process.env.PORT || 3000, function () {
     console.log('%s message server listening to %s', server.name, server.url);
 });
 
-// Microsoft bot framework
-// Sithara
-// let connector = new builder.ChatConnector({
-//     appId: "246c3ebe-816f-4a5e-851b-bb3e8247bbe1",
-//     appPassword: "7EVkPaNttWKhOWkcKHSpY0Q"
-// });
-//Prasanna
+//Microsoft bot framework id and password
 let connector = new builder.ChatConnector({
     appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
     appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
 });
 
+//Create bot
 let bot = new builder.UniversalBot(connector);
 
 //Server routes
-require('./app/routes/routes')(server,passport,connector,bot,builder);
+require('./app/routes/index')(
+    server,passport,connector,bot,builder);
 
 //Bot on
 bot.on('contactRelationUpdate', function (message) {
@@ -85,7 +81,9 @@ bot.on('contactRelationUpdate', function (message) {
             .text("Hello %s... Thanks for adding me. Say 'hello' to see some great demos.", name || 'there');
         bot.send(reply);
     } else {
-        // delete their data
+        if (message.action === 'remove') {
+            console.log('testing');
+        }
     }
 });
 bot.on('typing', function (message) {

@@ -3,21 +3,25 @@
  */
 const request = require('request');
 //Repositories
-const entity_repo = require('../repositories/entity_repository');
-const settings_repo = require('../repositories/settings_repository');
+const entityRepository = require('../repositories/entity_repository');
+const witRepository = require('../repositories/wit_repository');
 
 //App constants
 const wit_content_type = 'application/json';
 
-async function getWitServerAccessToken(){
-    let token;
-    await settings_repo.getToken(function (app_token) {
-        token = app_token;
-    });
-    return 'Bearer ' + token;
-}
-
 module.exports = {
+    getEntities: async function(req,res){
+        let url = 'https://api.wit.ai/entities?v=20170307';
+        request({
+            method: 'GET', url: url,
+            headers: {
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
+            }
+        }, function (err, wit_res) {
+            if (err) {return res.json(500,{message: err});}
+            return res.json(200,{data: JSON.parse(wit_res.body)});
+        });
+    },
     deleteEntity: async function(req,res) {
         let entity_name = req.body.entity_name;
         if(typeof entity_name==='undefined' || entity_name===''){
@@ -26,11 +30,11 @@ module.exports = {
         request({
             method: 'DELETE', url: url,
             headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
-            entity_repo.deleteEntity(entity_name,function (result) {
+            entityRepository.deleteEntity(entity_name,function (result) {
                 return res.json(200,{data: JSON.parse(wit_res.body), message: result});
             });
         });
@@ -43,27 +47,15 @@ module.exports = {
         request({
             method: 'GET', url: url,
             headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
-            entity_repo.getEntityValues(entity_name,function (result) {
+            entityRepository.getEntityValues(entity_name,function (result) {
                 return res.json(200,{data: JSON.parse(wit_res.body), values: result});
             });
         });
 
-    },
-    getEntities: async function(req,res){
-        let url = 'https://api.wit.ai/entities?v=20170307';
-        request({
-            method: 'GET', url: url,
-            headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
-            }
-        }, function (err, wit_res) {
-            if (err) {return res.json(500,{message: 'Internal sever error'});}
-            return res.json(200,{data: JSON.parse(wit_res.body)});
-        });
     },
     putEntityById: async function(req,res){
         let entity_name = req.body.entity_name;
@@ -86,7 +78,7 @@ module.exports = {
             method: 'PUT', url: url,
             json: body,
             headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -138,7 +130,7 @@ module.exports = {
             method: 'POST', url: url,
             json: body,
             headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             console.log(wit_res.body);
@@ -155,7 +147,7 @@ module.exports = {
         request({
             method: 'GET', url: url,
             headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
@@ -183,7 +175,7 @@ module.exports = {
             method: 'POST', url: url,
             json: body,
             headers: {
-                'Authorization': await getWitServerAccessToken(), 'Content-Type': wit_content_type
+                'Authorization': await witRepository.getWitServerAccessToken(), 'Content-Type': wit_content_type
             }
         }, function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
