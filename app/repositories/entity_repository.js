@@ -60,13 +60,34 @@ module.exports = {
         callback(false);
     },
     getEntityValues: async function(name, callback){
-        let result = await entityModel.getEntityByName(name);
-        if(result){
-            let entity_id = result.dataValues.id;
-            result = await entityDataModel.getAllEntityData(entity_id);
-            let ret = [];
-            for(let i=0; i<result.length; i++){ret.push(result[i].dataValues);}
-            return callback(ret);
+        let con = true;
+        if(name.length>3){
+            if(name.substr(0,4)==='wit$'){
+                con = false;
+                let result = await entityModel.getEntityByName(
+                    name.substr(4, name.length));
+                if (result) {
+                    let entity_id = result.dataValues.id;
+                    result = await entityDataModel.getAllEntityData(entity_id);
+                    let ret = [];
+                    for (let i = 0; i < result.length; i++) {
+                        ret.push(result[i].dataValues);
+                    }
+                    return callback(ret);
+                }else{return callback([]);}
+            }
+        }
+        if(con) {
+            let result = await entityModel.getEntityByName(name);
+            if (result) {
+                let entity_id = result.dataValues.id;
+                result = await entityDataModel.getAllEntityData(entity_id);
+                let ret = [];
+                for (let i = 0; i < result.length; i++) {
+                    ret.push(result[i].dataValues);
+                }
+                return callback(ret);
+            }
         }
         return callback(result);
     },
