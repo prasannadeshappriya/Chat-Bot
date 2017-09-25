@@ -96,7 +96,7 @@ module.exports = {
 //Set the line break for message
 async function setLineBreaks(lines,callback) {
     let output;
-    let data_arr = lines.split(' \\n\\n ');
+    let data_arr = lines.split('<br>');
     if(data_arr.length>0){output=data_arr[0];}
     if(data_arr.length>1){for(let i=1; i<data_arr.length; i++){output=output + '\n\n' + data_arr[i];}}
     callback(output);

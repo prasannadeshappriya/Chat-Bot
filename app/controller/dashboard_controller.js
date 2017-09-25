@@ -101,6 +101,7 @@ module.exports = {
         if(typeof intent_name==='undefined' || intent_name===''){
             return res.json(400,{message: 'intent_name is required'});
         }
+        console.log(intent_data);
         await intentRepository.updateIntent(
             intent_name, intent_data,
             function (callback) {
