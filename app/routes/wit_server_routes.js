@@ -5,6 +5,20 @@
 const witController = require('../controller/wit_controller');
 
 module.exports = function (server,passport) {
+    server.post(
+        "/wit/updateWitData",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            witController.updateWitData(req,res);
+        }
+    );
+    server.post(
+        "/wit/deleteWitData",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            witController.deleteWitData(req,res);
+        }
+    );
     server.get(
         "/wit/getEntityById",
         passport.authenticate('jwt', {session :false}),

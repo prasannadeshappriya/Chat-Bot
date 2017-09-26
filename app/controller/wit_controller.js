@@ -10,6 +10,26 @@ const witRepository = require('../repositories/wit_repository');
 const wit_content_type = 'application/json';
 
 module.exports = {
+    deleteWitData: async function(req, res){
+        let entity_data = req.body.entity_data;
+        if(typeof entity_data==='undefined' || entity_data===''){
+            return res.json(400,{message: 'entity_data is required'});}
+        try{entity_data = JSON.parse(entity_data)}
+        catch (err){return res.json(400,{message: 'entity_data should be a json string'});}
+        let result = await witRepository.deleteWitData(entity_data);
+        if(result[0]){return res.json(200,{message: result[1]});}
+        else{return res.json(400,{message: result[1]});}
+    },
+    updateWitData: async function(req,res){
+        let entity_data = req.body.entity_data;
+        if(typeof entity_data==='undefined' || entity_data===''){
+            return res.json(400,{message: 'entity_data is required'});}
+        try{entity_data = JSON.parse(entity_data)}
+        catch (err){return res.json(400,{message: 'entity_data should be a json string'});}
+        let result = await witRepository.updateWitData(entity_data);
+        if(result[0]){return res.json(200,{message: result[1]});}
+        else{return res.json(400,{message: result[1]});}
+    },
     getEntities: async function(req,res){
         let url = 'https://api.wit.ai/entities?v=20170307';
         request({

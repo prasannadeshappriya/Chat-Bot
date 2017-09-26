@@ -35,6 +35,17 @@ module.exports = {
             return null;
         }
     },
+    updateEntityDataById: async function(entity_id, entity_value, entity_data,old_value){
+        try{
+            return await model.entity_data.update(
+                {data: entity_data},
+                {where:{entity_id: entity_id, data: old_value}}
+            );
+        } catch (err) {
+            console.log(err); //Display error message
+            return null;
+        }
+    },
     createEntityData: async function(entity_id, entity_value, entity_data){
         try{
             return await model.entity_data.create({
@@ -51,6 +62,16 @@ module.exports = {
         try{
             return await model.entity_data.destroy({
                 where: {entity_id: entity_id}
+            });
+        } catch (err) {
+            console.log(err); //Display error message
+            return null;
+        }
+    },
+    deleteEntityDataByPreviousValue: async function(entity_id, entity_value, previous_value){
+        try{
+            return await model.entity_data.destroy({
+                where: {value: entity_value, entity_id:  entity_id, data:previous_value}
             });
         } catch (err) {
             console.log(err); //Display error message
