@@ -59,11 +59,8 @@ server.listen(process.env.port || process.env.PORT || 3000, function () {
     console.log('%s message server listening to %s', server.name, server.url);
 });
 
-//Microsoft bot framework id and password
-let connector = new builder.ChatConnector({
-    appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
-    appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
-});
+//Microsoft bot framework credentials
+let connector = require('./app/config/bot_config')(builder);
 
 //Create bot
 let bot = new builder.UniversalBot(connector);
