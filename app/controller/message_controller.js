@@ -15,18 +15,13 @@ const messageRepository = require('../repositories/message_repository');
 module.exports = {
     sendBroadcastMessage: async function(bot,builder,message){
         let users = [];
+        console.log(message);
         await Object.keys(sessions)
-            .forEach(function (key) {
+            .forEach(async function (key) {
                 let user = sessions[key];
                 if(typeof sessions[key].context.address !== 'undefined'){
                     let address = sessions[key].context.address;
-                    let msg = new builder.Message().address(address);
-                    let user_message;
-                    for(let i=0; i<message.length; i++){
-                        if(i===0){user_message=message[i];}
-                        else{user_message = user_message + '\n\n' + message[i];}
-                    }
-                    msg.text(user_message);msg.textLocale('en-US');
+                    let msg = await messageRepository.sendMessageByAddress(address,builder,message);
                     let tmp_obj = {name: sessions[key].context.name, id: sessions[key].context.id};
                     users.push(tmp_obj);
                     bot.send(msg);
@@ -53,6 +48,10 @@ module.exports = {
         console.log(session.message.text.toLowerCase());
         console.log('---------------------------------');
 
+        //Send typing indicator
+        session.sendTyping();
+
+        //get access token
         let accessToken;
         await settingsRepository.getToken(function (token) {
             accessToken = token

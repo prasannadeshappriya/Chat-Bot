@@ -12,7 +12,7 @@ module.exports = function (builder) {
 
     //New App
     return new builder.ChatConnector({
-        appId: "2d6d80a1-c870-4431-9332-70b3f0b891c6",
-        appPassword: "AAKWVOiu77WROdH9q9bfe0g"
+        appId: "46635ff5-b684-4f46-bdb7-67b284227cb7",
+        appPassword: "hmn9RFpn033wLjHSLn9it7w"
     });
 };

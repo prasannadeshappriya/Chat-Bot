@@ -79,7 +79,8 @@ bot.on('contactRelationUpdate', function (message) {
         bot.send(reply);
     } else {
         if (message.action === 'remove') {
-            console.log('testing');
+            console.log('User removed');
+            console.log(message);
         }
     }
 });
@@ -89,6 +90,8 @@ bot.on('typing', function (message) {
 bot.on('deleteUserData', function (message) {
     // User asked to delete their data
 });
+
+// bot.use(builder.Middleware.dialogVersion({ version: 1.0, resetCommand: /^reset/i }));
 
 // Bots Dialogs
 String.prototype.contains = function(content){

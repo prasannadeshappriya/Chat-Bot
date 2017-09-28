@@ -34,6 +34,15 @@ module.exports = {
             callback(false);
         }
     },
+    sendMessageByAddress: async function(address, builder, message){
+        let msg = new builder.Message().address(address);
+        let user_message;
+        await setLineBreaks(message,async function (output) {
+            user_message = output;
+        });
+        msg.text(user_message);msg.textLocale('en-US');
+        return msg;
+    },
     sendMessage: async function(data, default_message, callback){
         let entity = null; let key='';
         let entities = [];

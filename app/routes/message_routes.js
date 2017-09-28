@@ -13,7 +13,7 @@ module.exports = function (server,passport,builder,connector,bot) {
             let message = req.body.message;
             if(typeof message === 'undefined' ||
                 message === ''){return res.send(400,{message: 'message required'});}
-            let result = await messageController.sendBroadcastMessage(bot,builder,message.split('\n'));
+            let result = await messageController.sendBroadcastMessage(bot,builder,message);
             return res.send(200,{sent_users: result});
         }
     );
