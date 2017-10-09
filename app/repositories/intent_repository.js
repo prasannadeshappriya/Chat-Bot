@@ -33,6 +33,19 @@ module.exports = {
             });
         callback(resData);
     },
+    getIntentNames: async function(callback){
+        let result = await intentModel.getIntentId();
+        if (result) {
+            let entity_id = result.dataValues.id;
+            result = await intentModel.getAllIntentNames(entity_id);
+            let resData = [];
+            Object.keys(result)
+                .forEach(function (key) {
+                    resData.push(result[key].dataValues.value);
+                });
+            return callback(resData)
+        }else{ return callback([]);}
+    },
     updateIntent: async function(intent_name, intent_data, callback){
         let result = await entityModel.getEntityByName(con_intent_name);
         if(result) {

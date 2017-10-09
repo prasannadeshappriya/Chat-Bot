@@ -48,7 +48,7 @@ module.exports = {
             return [400, {message: 'Invalid password'}];
         }
         try {
-            let data = userModel.findOrCreateUser(
+            let data = await userModel.findOrCreateUser(
                 username, pass_hash.generate(password)
             );
             let created = data[1];

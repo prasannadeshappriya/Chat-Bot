@@ -26,6 +26,13 @@ module.exports = function (server, passport) {
             dashboardController.getIntent(req,res);
         }
     );
+    server.get(
+        "/intent/getNames",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            dashboardController.getIntentNames(req,res);
+        }
+    );
     server.post(
         "/intent/delete",
         passport.authenticate('jwt', {session :false}),

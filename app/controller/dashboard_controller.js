@@ -77,6 +77,11 @@ module.exports = {
                 else {return res.json(409, {message: 'intent already exist'});}
         });
     },
+    getIntentNames: async function(req,res){
+        intentRepository.getIntentNames(function (callback) {
+            return res.json(200,{data: callback});
+        });
+    },
     getIntent: async function(req,res){
         let intent_id = req.query.intentid;
         if(typeof intent_id==='undefined' || intent_id===''){

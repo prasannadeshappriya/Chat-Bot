@@ -24,7 +24,9 @@ module.exports = {
     getSettings: async function(req,res){
         try {
             let result = await settingsRepository.getSettings();
-            return res.json(201, {message: 'Success', settings: result[0].dataValues});
+            if(result[0]) {
+                return res.json(201, {message: 'Success', settings: result[0].dataValues});
+            }else{return res.json(201, {message: 'Success', settings: {}});}
         }catch (err){return res.json(500, {message: 'internal server error'});}
     }
 };

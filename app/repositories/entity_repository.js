@@ -42,9 +42,10 @@ module.exports = {
             }
             return callback(true);
         }else{
-            result = entityModel.createEntity(entity_name);
+            result = await entityModel.createEntity(entity_name);
+            console.log(result);
             let entity_id = result.dataValues.id;
-            result = entityDataModel.createEntityData(
+            result = await entityDataModel.createEntityData(
                 entity_id, entity_value, entity_data
             );
             return callback(true);

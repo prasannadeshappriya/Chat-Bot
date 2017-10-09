@@ -4,15 +4,11 @@
 module.exports = function (builder) {
     //Microsoft bot framework id and password
 
-    // Old App
-    // let connector = new builder.ChatConnector({
-    //     appId: "ab2d1a14-71e9-48a2-9bdb-d9b94cf9aa1a",
-    //     appPassword: "AbKPomU0PRVkEEzoOo3Sejf"
-    // });
-
-    //New App
     return new builder.ChatConnector({
-        appId: "46635ff5-b684-4f46-bdb7-67b284227cb7",
-        appPassword: "hmn9RFpn033wLjHSLn9it7w"
+        appId: "5df05d6b-54b4-463f-9a78-9557b50d4b33",
+        appPassword: "tnn23i1J2HiUZjK2AOQ80UG"
     });
 };
+
+
+
