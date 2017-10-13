@@ -4,7 +4,6 @@
 const rn= require('random-number');
 
 //Models
-const messageModel = require('../models/message_model');
 const sessionModel = require('../models/session_model');
 
 //Repositories
@@ -40,7 +39,8 @@ module.exports = {
         await setLineBreaks(message,async function (output) {
             user_message = output;
         });
-        msg.text(user_message);msg.textLocale('en-US');
+        msg.text(user_message);
+        msg.textLocale('en-US');
         return msg;
     },
     sendMessage: async function(data, default_message, callback){

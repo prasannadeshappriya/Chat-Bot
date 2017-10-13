@@ -16,7 +16,7 @@ module.exports = {
     },
     getAllEntityData: async function(entity_id){
         try{
-            return model.entity_data.findAll({
+            return await model.entity_data.findAll({
                 where: {entity_id: entity_id}
             });
         } catch (err) {
@@ -90,7 +90,7 @@ module.exports = {
     },
     bulkCreateEntityData: async function(entity_values){
         try {
-            return model.entity_data.bulkCreate(entity_values);
+            return await model.entity_data.bulkCreate(entity_values);
         }catch (err){
             console.log(err); //Display error message
             return null;

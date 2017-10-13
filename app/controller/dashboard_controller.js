@@ -19,7 +19,7 @@ module.exports = {
             entity_data = JSON.parse(entity_data);
         }catch (err){res.send(400,{message: 'entity_data should be in json format, parse error'});}
         try {
-            let result = entityRepository.createEntity(entity_name, entity_description, entity_data);
+            let result = await entityRepository.createEntity(entity_name, entity_description, entity_data);
             if (result) {
                 return res.json(201, {message: 'entity created', data: result});
             }else{
@@ -50,7 +50,7 @@ module.exports = {
             return res.json(400,{message: 'entity_name is required'});}
         if(typeof entity_value==='undefined' || entity_value===''){
             return res.json(400,{message: 'entity_value is required'});}
-        entityRepository.deleteEntityValue(
+        await entityRepository.deleteEntityValue(
             entity_name, entity_value,
             function (callback) {
                 return res.json(200,{message: callback, method: 'delete'});
@@ -70,7 +70,7 @@ module.exports = {
         if(typeof intent_data==='undefined' || intent_data===''){
             return res.json(400,{message: 'intent_data is required'});
         }
-        intentRepository.createIntent(
+        await intentRepository.createIntent(
             intent_name, intent_description, intent_data,
             function (callback) {
                 if(callback[1]){return res.json(201,{message: 'intent created'});}
@@ -78,7 +78,7 @@ module.exports = {
         });
     },
     getIntentNames: async function(req,res){
-        intentRepository.getIntentNames(function (callback) {
+        await intentRepository.getIntentNames(function (callback) {
             return res.json(200,{data: callback});
         });
     },
@@ -88,11 +88,11 @@ module.exports = {
             return res.json(400,{message: 'intent_id is required'});
         }
         if(intent_id==='all'){
-            intentRepository.getIntentAll(function (callback) {
+            await intentRepository.getIntentAll(function (callback) {
                 return res.json(200,{data: callback});
             })
         }else{
-            intentRepository.getIntent(intent_id, function (callback) {
+            await intentRepository.getIntent(intent_id, function (callback) {
                 return res.json(200,{data: callback});
             });
         }
@@ -106,7 +106,6 @@ module.exports = {
         if(typeof intent_name==='undefined' || intent_name===''){
             return res.json(400,{message: 'intent_name is required'});
         }
-        console.log(intent_data);
         await intentRepository.updateIntent(
             intent_name, intent_data,
             function (callback) {
@@ -118,7 +117,7 @@ module.exports = {
         if(typeof intent_name==='undefined' || intent_name===''){
             return res.json(400,{message: 'intent_name is required'});
         }
-        intentRepository.deleteIntent(intent_name, function (callback) {
+        await intentRepository.deleteIntent(intent_name, function (callback) {
             if(callback[0]){
                 return res.json(200,{message: 'intent, \'' + intent_name + '\' deleted' });
             }else{return res.json(400,{message: 'no intent found by \'' + intent_name + '\''});}
@@ -134,7 +133,7 @@ module.exports = {
             return res.json(400,{message: 'entity_value is required'});}
         if(typeof entity_data==='undefined' || entity_data===''){
             return res.json(400,{message: 'entity_data is required'});}
-        entityRepository.updateOrCreateEntityValue(
+        await entityRepository.updateOrCreateEntityValue(
             entity_name, entity_value, entity_data,
             function (callback) {
                 return res.json(200,{message: callback});
@@ -145,7 +144,7 @@ module.exports = {
         let entity_value = req.query.entity_value;
         if(typeof entity_name==='undefined'){entity_name = '';}
         if(typeof entity_value==='undefined'){entity_value = '';}
-        entityRepository.getEntityData(
+        await entityRepository.getEntityData(
             entity_name, entity_value,
             function (callback, entity_value) {
                 if(callback) {

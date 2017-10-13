@@ -54,7 +54,7 @@ module.exports = {
             }
         }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
-            entityRepository.deleteEntity(entity_name,function (result) {
+            await entityRepository.deleteEntity(entity_name,function (result) {
                 return res.json(200,{data: JSON.parse(wit_res.body), message: result});
             });
         });
@@ -71,7 +71,7 @@ module.exports = {
             }
         }, async function (err, wit_res) {
             if (err) {return res.json(500,{message: 'Internal sever error'});}
-            entityRepository.getEntityValues(entity_name,function (result) {
+            await entityRepository.getEntityValues(entity_name,function (result) {
                 return res.json(200,{data: JSON.parse(wit_res.body), values: result});
             });
         });

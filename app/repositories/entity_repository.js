@@ -1,7 +1,6 @@
 /**
  * Created by prasanna on 9/16/17.
  */
-let models = require('../database/models');
 const entityModel = require('../models/entity_model');
 const entityDataModel = require('../models/entity_data_model');
 
