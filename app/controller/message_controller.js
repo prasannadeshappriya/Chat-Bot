@@ -57,6 +57,7 @@ module.exports = {
             accessToken = token
         });
         console.log('---------------------5---------------------');
+        console.log(accessToken);
         const client = new Wit({accessToken: accessToken});
         interactive(client);
         console.log('-------------------6-----------------------');
