@@ -33,6 +33,7 @@ module.exports = {
         let sessionId;
         //get all stored sessions from the database;
         let stored_sessions = await sessionRepository.getAllSessions();
+        console.log(stored_sessions);
         if(stored_sessions[0]) {
             for (let i = 0; i < stored_sessions[1].length; i++){
                 let item = stored_sessions[1][i];
