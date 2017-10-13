@@ -33,9 +33,6 @@ module.exports = {
         let sessionId;
         //get all stored sessions from the database;
         let stored_sessions = await sessionRepository.getAllSessions();
-        console.log('----------------------------------------------');
-        console.log(stored_sessions);
-        console.log('----------------------------------------------');
         if(stored_sessions[0]) {
             for (let i = 0; i < stored_sessions[1].length; i++){
                 let item = stored_sessions[1][i];
@@ -50,28 +47,29 @@ module.exports = {
         console.log(session.message.user.name);
         console.log(session.message.text.toLowerCase());
         console.log('---------------------------------');
-
+        console.log('---------------------3---------------------');
         //Send typing indicator
         session.sendTyping();
-
+        console.log('---------------------4---------------------');
         //get access token
         let accessToken;
         await settingsRepository.getToken(function (token) {
             accessToken = token
         });
-
+        console.log('---------------------5---------------------');
         const client = new Wit({accessToken: accessToken});
         interactive(client);
-
+        console.log('-------------------6-----------------------');
         let fbid = session.message.user.id;
-
+        console.log('-------------------7-----------------------');
         //get session id
         let sessionId;
+        console.log('------------------1------------------------');
         await messageRepository.getSessionId(
             sessions, session, function (session_id) {
                 sessionId = session_id;
             });
-
+        console.log('--------------------2----------------------');
         //write session into database if session does not found
         if(!sessionId){
             console.log('--------------------Creating session for new user----------------------');
@@ -86,12 +84,13 @@ module.exports = {
             };
             sessions[sessionId] = session_data;
             //Write session to the database
+            console.log('--------------------00-----------------------');
             let result = await sessionRepository.createOrUpdateSession(
                 fbid,JSON.stringify(session_data)
             );
             if(result[0]){console.log('--------------------Session saved to database--------------------------');}
         }
-
+        console.log('--------------------8----------------------');
         try {
             let data = await client.message(session.message.text.toLowerCase(), {});
             console.log('Wit.ai response: ' + JSON.stringify(data));
