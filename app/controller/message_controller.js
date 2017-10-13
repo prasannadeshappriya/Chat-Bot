@@ -58,7 +58,7 @@ module.exports = {
         });
 
         const client = new Wit({accessToken: accessToken});
-        //interactive(client);
+        interactive(client);
 
         let fbid = session.message.user.id;
 
