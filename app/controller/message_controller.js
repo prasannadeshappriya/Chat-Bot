@@ -60,7 +60,7 @@ module.exports = {
         console.log(accessToken);
         const client = new Wit({accessToken: accessToken});
         console.log(accessToken);
-        interactive(client);
+        //interactive(client);
         console.log(accessToken);
         console.log('-------------------6-----------------------');
         let fbid = session.message.user.id;
