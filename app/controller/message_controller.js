@@ -102,6 +102,16 @@ module.exports = {
                 await messageRepository.sendMessage(
                     data, default_message, function (message) {
                         session.send(message);
+                        // session.send({
+                        //     text: message,
+                        //     attachments: [
+                        //         {
+                        //             contentType: 'image/jpeg',
+                        //             contentUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXp_7Tdj4P-Ggalje9-n9diwLjPOUSlO5I-8NkhDTJdV5z9lS2-g',
+                        //             name: 'dress code'
+                        //         }
+                        //     ]
+                        // })
                     });
             }else {return session.send(default_message);}
         }catch (err){
