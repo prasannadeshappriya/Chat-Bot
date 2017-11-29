@@ -27,4 +27,8 @@ module.exports = function (server,passport,connector,bot,builder) {
     //settings routes
     require('../../app/routes/settings_routes')(
         server,passport);
+
+    //API routes
+    require('../../app/routes/api_routes')(
+        server,passport);
 };
