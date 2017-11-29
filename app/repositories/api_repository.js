@@ -34,5 +34,45 @@ module.exports = {
             response.push(result[i].dataValues);
         }
         return callback(response);
+    },
+    deleteAPI: async function(apiName, callback){
+        let result;
+        result = await apiModel.getAllAPIs();
+
+        //Searching and delete
+        for(let i=0; i<result.length; i++){
+            let storedConnetionData = result[i].dataValues.connection_data;
+            try{storedConnetionData = JSON.parse(storedConnetionData);}
+            catch (err){console.log('Error parse string to json');}
+            if(storedConnetionData['apiName']===apiName){
+                try {
+                    await apiModel.deleteAPI(result[i].dataValues.id);
+                    return callback(true);
+                }catch (err) {
+                    return callback(false);
+                }
+            }
+        }
+        return callback(false);
+    },
+    updateAPI: async function(apiName, connectionData, callback){
+        let result = await apiModel.getAllAPIs();
+
+        //Validation
+        for(let i=0; i<result.length; i++){
+            let storedConnetionData = result[i].dataValues.connection_data;
+            try{storedConnetionData = JSON.parse(storedConnetionData);}
+            catch (err){console.log('Error parse string to json');}
+            if(storedConnetionData['apiName']===apiName){
+                let dbResponse = await apiModel.updateAPI(
+                    result[i].dataValues.id, JSON.stringify(connectionData));
+                if(dbResponse[0]>0) {
+                    return callback(true);
+                }else{
+                    return callback(false);
+                }
+            }
+        }
+        return callback(false);
     }
 };

@@ -19,4 +19,18 @@ module.exports = function (server,passport) {
             apiController.getAllAPIs(req,res);
         }
     );
+    server.post(
+        "/api/deleteAPI",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            apiController.deleteAPI(req,res);
+        }
+    );
+    server.post(
+        "/api/updateAPI",
+        passport.authenticate('jwt', {session :false}),
+        function (req,res) {
+            apiController.updateAPI(req,res);
+        }
+    );
 };

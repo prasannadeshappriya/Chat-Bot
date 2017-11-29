@@ -22,5 +22,26 @@ module.exports = {
             //When error
             return [];
         }
-    }
+    },
+    deleteAPI: async function(id){
+        try{
+            return await model.api_info.destroy({
+                where: {id: id}
+            });
+        } catch (err) {
+            console.log(err); //Display error message
+            return null;
+        }
+    },
+    updateAPI: async function(id, connection_data){
+        try{
+            return await model.api_info.update(
+                {connection_data: connection_data},
+                {where:{id: id}}
+            );
+        } catch (err) {
+            console.log(err); //Display error message
+            return null;
+        }
+    },
 };
