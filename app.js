@@ -55,8 +55,12 @@ server.use(cors({
 server.opts('/\.*/', corsHandler, optionsRoute);
 //---------------------------------------------------------------------------------------------------------
 
-server.listen(process.env.port || process.env.PORT || 3000, function () {
-    console.log('%s message server listening to %s', server.name, server.url);
+// server.listen(process.env.port || process.env.PORT || 3000, function () {
+//     console.log('%s message server listening to %s', server.name, server.url);
+// });
+
+server.listen(process.env.ALWAYSDATA_HTTPD_PORT, process.env.ALWAYSDATA_HTTPD_IP, function(){
+    console.log('Server listing at https://alwaysdata.net:%s', server.address().port);
 });
 
 //Microsoft bot framework credentials
