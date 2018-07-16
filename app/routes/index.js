@@ -4,10 +4,6 @@
 
 //Route configurations
 module.exports = function (server,passport,connector,bot,builder) {
-    //View-page routes and redirect links
-    require('../../app/routes/page_redirect_routes')(
-        server);
-
     //Wit server routes
     require('../../app/routes/wit_server_routes')(
         server,passport);
@@ -35,4 +31,8 @@ module.exports = function (server,passport,connector,bot,builder) {
     //API routes
     require('../../app/routes/api_routes')(
         server,passport);
+
+    //View-page routes and redirect links
+    require('../../app/routes/page_redirect_routes')(
+        server);
 };
