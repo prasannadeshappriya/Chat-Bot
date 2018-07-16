@@ -1,4 +1,6 @@
-module.exports = function (server, passport) {
+const restify = require('restify');
+
+module.exports = function (server) {
     //Google site verification routes
     server.get(
         "/google2b8ac12bca5d3b48.html",

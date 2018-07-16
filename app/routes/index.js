@@ -5,7 +5,7 @@
 //Route configurations
 module.exports = function (server,passport,connector,bot,builder) {
     //View-page routes and redirect links
-    require('../../app/routes/user_routes')(
+    require('../../app/routes/page_redirect_routes')(
         server);
 
     //Wit server routes
