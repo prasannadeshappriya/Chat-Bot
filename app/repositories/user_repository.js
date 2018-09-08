@@ -48,6 +48,9 @@ module.exports = {
             return [400, {message: 'Invalid password'}];
         }
         try {
+            return [403, {message: 'Registration process is disabled by the admin, ' +
+                'Login with admin credentials and enable user registration.'}];
+            /*
             let data = await userModel.findOrCreateUser(
                 username, pass_hash.generate(password)
             );
@@ -60,6 +63,7 @@ module.exports = {
                 return [201, {username: user.username, token: token}];
             }
             return [409, {message: 'User already exist'}];
+            */
         } catch (err) {
             console.log(err); //Log the error
             return [500, {message: 'Server error occurred'}];
