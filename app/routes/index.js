@@ -31,4 +31,8 @@ module.exports = function (server,passport,connector,bot,builder) {
     //API routes
     require('../../app/routes/api_routes')(
         server,passport);
+
+    //View-page routes and redirect links
+    require('../../app/routes/page_redirect_routes')(
+        server);
 };
